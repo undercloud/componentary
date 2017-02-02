@@ -1,8 +1,19 @@
 <?php
 require __DIR__ . '/DomHelper.php';
 require __DIR__ . '/AbstractDom.php';
+require __DIR__ . '/DomWalker.php';
+require __DIR__ . '/Resolver.php';
 require __DIR__ . '/Element.php';
-require __DIR__ . '/Component.php';
+
+Class Combo extends Element
+{
+	public function render()
+	{
+		return (
+			'<h1>Yeeeaaahh</h1><p></p><img />'
+		);
+	}
+}
 
 class App extends Element
 {
@@ -10,18 +21,12 @@ class App extends Element
 	{
 		return (
 			"<Combo hu='ombo' />
-			Viiby Висушу
 			<ul>
-				<li>One</li>
-				<li>Two</li>
-				<li>Three</li>
+				<li>Mali</li>
 			</ul>"
 		);
 	}
 }
 
-echo 'дааа';
-
 $e = new App;
-
 echo $e->toString();

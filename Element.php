@@ -74,10 +74,10 @@ class Element implements AbstractDom
 	{
 		$render = $this->render();
 		if (self::$preprocessor instanceof Closure) {
-			$render = call_user_func(self::$preprocessor, $render);
+			//$render = call_user_func(self::$preprocessor, $render);
 		}
 
-		$render = DomHelper::assignComponents($render);
+		$render = (new DomWalker($render))->walk();
 
 		return $render;
 	}
