@@ -77,7 +77,8 @@ class Element implements AbstractDom
 			//$render = call_user_func(self::$preprocessor, $render);
 		}
 
-		$render = (new DomWalker($render))->walk();
+		$walker = new DomWalker($render);
+		$render = $walker->walk();
 
 		return $render;
 	}

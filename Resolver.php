@@ -22,8 +22,8 @@ class Resolver
 		);
 	}
 
-	public function resolve(array $attrs = [])
+	public function resolve(array $attrs = array())
 	{
-		return (string) $this->instance->newInstanceArgs($attrs)->toString();
+		return (string) $this->instance->newInstance()->setAttrs($attrs)->toString();
 	}
 }

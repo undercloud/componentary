@@ -8,7 +8,7 @@ class DomHelper
 
 	public static function buildArgs(array $args)
 	{
-		$pairs = [];
+		$pairs = array();
 		foreach ($args as $key => $value) {
 			$pairs[] = $key . '=' . self::esc($value);
 		}
