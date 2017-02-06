@@ -1,4 +1,6 @@
 <?php
+namespace Elementary;
+
 class DomHelper
 {
 	public static function esc($value)
@@ -8,7 +10,7 @@ class DomHelper
 
 	public static function buildArgs(array $args)
 	{
-		$pairs = array();
+		$pairs = [];
 		foreach ($args as $key => $value) {
 			$pairs[] = $key . '=' . self::esc($value);
 		}

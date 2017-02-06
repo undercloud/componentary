@@ -3,9 +3,11 @@ require __DIR__ . '/DomHelper.php';
 require __DIR__ . '/AbstractDom.php';
 require __DIR__ . '/DomWalker.php';
 require __DIR__ . '/Resolver.php';
-require __DIR__ . '/Element.php';
+require __DIR__ . '/Component.php';
 
-Class Combo extends Element
+use Elementary\Component;
+
+Class Combo extends Component
 {
 	public function render()
 	{
@@ -15,7 +17,7 @@ Class Combo extends Element
 	}
 }
 
-class App extends Element
+class App extends Component
 {
 	public function render()
 	{
@@ -29,4 +31,4 @@ class App extends Element
 }
 
 $e = new App;
-echo $e->toString();
+echo $e;

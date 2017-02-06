@@ -1,5 +1,8 @@
 <?php
-//use ReflectionClass;
+namespace Elementary;
+
+use Exception;
+use ReflectionClass;
 
 class Resolver
 {
@@ -18,12 +21,12 @@ class Resolver
 	{
 		return (
 			null !== $this->instance 
-			and $this->instance->isSubclassOf('Element')
+			and $this->instance->isSubclassOf(Component::class)
 		);
 	}
 
-	public function resolve(array $attrs = array())
+	public function resolve(array $attrs = [])
 	{
-		return (string) $this->instance->newInstance()->setAttrs($attrs)->toString();
+		return (string) $this->instance->newInstance()->setAttrs($attrs);
 	}
 }

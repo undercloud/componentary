@@ -1,85 +1,63 @@
 <?php
+namespace Elementary
+
 class Element implements AbstractDom
 {
-	protected static $preprocessor;
-
-	protected $tag;
-
-	protected $content;
-
-	protected $attrs = array();
+	protected static $hooks = [
+		'area', 'base', 'br', 
+		'col', 'command', 'embed', 
+		'hr', 'img', 'input', 
+		'keygen', 'link', 'meta', 
+		'param', 'source', 'track', 'wbr'
+	];
 
 	protected $selfClose = false;
 
-	public function __construct($tag = null, $content = null, $attrs = array())
-	{
-		$this->setTag($tag);
-		$this->setContent($content);
-		$this->setAttrs($attrs);
-	}
+	protected $tag;
 
-	public static function setPreprocessor(Closure $preprocessor)
-	{
-		$this->preprocessor = $preprocessor;
-	}
-
-	public function setSelfClose($flag)
-	{
-		$this->selfClose = $flag;
-
-		return $this;
-	}
-
-	public function setTag($tag)
+	public function __construct($tag)
 	{
 		$this->tag = $tag;
 
-		return $this;
+		if (in_array($tag, self::$hooks)) {
+			$this->selfClose = true;
+		}
 	}
 
-	public function setContent($content, $escape = false)
+	public function css()
 	{
-		$this->content = $content;
-
-		return $this;
-	}
-
-	public function setAttrs(array $attrs)
-	{
-		$this->attrs = array_merge($this->attrs, $attrs);
-
-		return $this;
-	}
-
-	public function hasAttr($attr)
-	{
-		return isset($this->attrs[$attr]);
-	}
-
-	public function __set($key, $value)
-	{
-		$this->attrs[$key] = (string) $value;
+		
 	}
 
 	public function render()
 	{
 		if ($this->selfClose) {
-			return '<' . $this->tag . ($this->attrs ? (' ' . DomHelper::buildArgs($this->attrs)) : '') . ' />';
+
 		} else {
-			return '<' . $this->tag . ($this->attrs ? (' ' . DomHelper::buildArgs($this->attrs)) : '') . '>' . $this->content . '</' . $this->tag . '>';
+
 		}
 	}
 
-	public function toString()
+	public function addClass($class)
 	{
-		$render = $this->render();
-		if (self::$preprocessor instanceof Closure) {
-			//$render = call_user_func(self::$preprocessor, $render);
+		if (!$this->hasClass($class)) {
+			
+		} 
+	}
+
+	public function hasClass($name)
+	{
+		if (isset($this->attrs['class'])) {
+			$class = explode(' ', $this->attrs['class']);
+
+			return in_array($name, $class);
 		}
 
-		$walker = new DomWalker($render);
-		$render = $walker->walk();
+		return false;
+	}
 
-		return $render;
+	public function __toString()
+	{
+		return $this->render();
 	}
 }

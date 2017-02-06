@@ -1,4 +1,9 @@
 <?php
+namespace Elementary;
+
+use Exception;
+use DOMDocument;
+
 class DomWalker
 {
 	private $render;
@@ -36,10 +41,17 @@ class DomWalker
 
 	public function parseAttributes($tag)
 	{
-		$document = new DOMDocument('1.0', 'UTF-8');
-		$document->loadXML($tag);
+		libxml_clear_errors();
 
-		$attrs = array();
+		$document = new DOMDocument('1.0', 'UTF-8');
+		if(!@$document->loadXML($tag)){
+			$tag = debug_backtrace()[0]['args'][0];
+			$lastError = libxml_get_last_error();
+
+			throw new Exception($lastError->message . ' ' . $tag);
+		}
+
+		$attrs = [];
 		foreach ($document->documentElement->attributes as $item) {
 			$attrs[$item->name] = $item->value;
 		}
