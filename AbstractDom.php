@@ -1,7 +1,7 @@
 <?php
 namespace Elementary;
 
-interface AbstractDom
+abstract class AbstractDom
 {
-	public function render();
+	abstract public function render();
 }

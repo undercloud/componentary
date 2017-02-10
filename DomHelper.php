@@ -12,7 +12,7 @@ class DomHelper
 	{
 		$pairs = [];
 		foreach ($args as $key => $value) {
-			$pairs[] = $key . '=' . self::esc($value);
+			$pairs[] = $key . '="' . self::esc($value) . '"';
 		}
 
 		return implode(' ', $pairs);

@@ -3,7 +3,7 @@ namespace Elementary;
 
 use Exception;
 
-class Component implements AbstractDom
+abstract class Component extends AbstractDom
 {
 	protected $attrs = [];
 
@@ -22,11 +22,6 @@ class Component implements AbstractDom
 	public function __set($key, $value)
 	{
 		$this->attrs[$key] = (string) $value;
-	}
-
-	public function render()
-	{
-		throw new Exception(';(');
 	}
 
 	public function toString()

@@ -1,7 +1,7 @@
 <?php
-namespace Elementary
+namespace Elementary;
 
-class Element implements AbstractDom
+class Element extends AbstractDom
 {
 	protected static $hooks = [
 		'area', 'base', 'br', 
@@ -15,6 +15,10 @@ class Element implements AbstractDom
 
 	protected $tag;
 
+	protected $attrs = [];
+
+	protected $content;
+
 	public function __construct($tag)
 	{
 		$this->tag = $tag;
@@ -24,36 +28,107 @@ class Element implements AbstractDom
 		}
 	}
 
-	public function css()
+	public function selfClose($mode)
 	{
-		
+		$this->selfClose = $mode;
+	}
+
+	public function __set($key, $val)
+	{
+		if ('style' == $key) {
+			$val = new Style($val);
+		}
+
+		if ('class' == $key) {
+			$val = new ClassList($val);	
+		}
+
+		$this->attrs[$key] = $val;
+	}
+
+	public function __get($key)
+	{
+		if (!isset($this->attrs[$key])) {
+			if ('style' == $key) {
+				$this->attrs[$key] = new Style;
+			}
+
+			if ('class' == $key) {
+				$this->attrs[$key] = new ClassList;	
+			}
+		}
+
+		return (
+			isset($this->attrs[$key]) ? $this->attrs[$key] : null
+		);
+	}
+
+	public function attr()
+	{
+		$args = func_get_args();
+
+		switch (count($args)) {
+			case 0:
+				return $this->attrs;
+
+			case 1:
+				$key = $args[0];
+
+				if (is_array($key)) {
+					foreach ($key as $k => $v) {
+						$this->__set($k, $v);
+					}
+				} else {
+					return $this->__get($key);
+				}
+			break;
+
+			case 2:
+				list($key, $val) = $args;
+				$this->__set($key, $val);
+			break;
+		}
+
+		return $this;
+	}
+
+	public function content()
+	{
+		$args = func_get_args();
+
+		switch (count($args)) {
+			case 0:
+				return $this->content;
+
+			case 1:
+				$this->content = DomHelper::esc($args[0]);
+			break;
+
+			case 2:
+				list($content, $escape) = $args;
+
+				$this->content = $escape ? DomHelper::esc($content) : $content;
+			break;
+		}
+
+		return $this;
 	}
 
 	public function render()
 	{
-		if ($this->selfClose) {
-
-		} else {
-
-		}
-	}
-
-	public function addClass($class)
-	{
-		if (!$this->hasClass($class)) {
-			
-		} 
-	}
-
-	public function hasClass($name)
-	{
-		if (isset($this->attrs['class'])) {
-			$class = explode(' ', $this->attrs['class']);
-
-			return in_array($name, $class);
-		}
-
-		return false;
+		return (
+			'<' . $this->tag . 
+			(
+				$this->attrs
+				? (' ' . DomHelper::buildArgs($this->attrs))
+				: ''
+			) . 
+			(
+				$this->selfClose
+				? ' />'
+				: ('>' . $this->content . '</' . $this->tag . '>')
+			)
+		);
 	}
 
 	public function __toString()
