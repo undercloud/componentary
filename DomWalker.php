@@ -1,16 +1,56 @@
 <?php
 namespace Elementary;
 
-use Exception;
+use Closure;
 use DOMDocument;
 
 class DomWalker
 {
 	private $render;
+	private static $preprocessor;
+	private static $postprocessor;
 
 	public function __construct($render)
 	{
 		$this->render = $render;
+	}
+
+	public static function setPreprocessor(Closure $preprocessor)
+	{
+		self::$preprocessor = $preprocessor;
+	}
+
+	public static function getPreprocessor()
+	{
+		return self::$preprocessor;
+	}
+
+	public function preProcess()
+	{
+		if (self::$preprocessor instanceof Closure) {
+			$this->render = call_user_func(self::$preprocessor, $this->render);
+		}
+
+		return $this;
+	}
+
+	public static function setPostprocessor(Closure $postprocessor)
+	{
+		self::$postprocessor = $postprocessor;
+	}
+
+	public static function getPostprocessor()
+	{
+		return self::$postprocessor;
+	}
+
+	public function postProcess()
+	{
+		if (self::$postprocessor instanceof Closure) {
+			$this->render = call_user_func(self::$postprocessor, $this->render);
+		}
+
+		return $this;
 	}
 
 	public function walk()
@@ -36,43 +76,31 @@ class DomWalker
 			}
 		}
 
-		return $parsed;
-	}
+		$this->render = $parsed;
 
-	public function parseAttributes($tag)
-	{
-		libxml_clear_errors();
-
-		$document = new DOMDocument('1.0', 'UTF-8');
-		if(!@$document->loadXML($tag)){
-			$tag = debug_backtrace()[0]['args'][0];
-			$lastError = libxml_get_last_error();
-
-			throw new Exception($lastError->message . ' ' . $tag);
-		}
-
-		$attrs = [];
-		foreach ($document->documentElement->attributes as $item) {
-			$attrs[$item->name] = $item->value;
-		}
-
-		return $attrs;
+		return $this;
 	}
 
 	public function assign($tag)
 	{
 		if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
-			$class = reset(explode(' ', substr($tag, 1, -2), 2));
+			$class = explode(' ', substr($tag, 1, -2), 2)[0];
+			$class = str_replace('-', '\\', $class);
 
 			$resolver = new Resolver($class);
 
 			if ($resolver->isValid()) {
-				$attrs = $this->parseAttributes($tag);
+				$attrs = DomHelper::parseAttributes($tag);
 
 				return $resolver->resolve($attrs);
 			}
 		}
 
 		return $tag;
+	}
+
+	public function __toString()
+	{
+		return (string) $this->render;
 	}
 }

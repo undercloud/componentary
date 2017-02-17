@@ -120,13 +120,13 @@ class Element extends AbstractDom
 			'<' . $this->tag . 
 			(
 				$this->attrs
-				? (' ' . DomHelper::buildArgs($this->attrs))
+				? (' ' . DomHelper::buildAttributes($this->attrs))
 				: ''
 			) . 
 			(
 				$this->selfClose
 				? ' />'
-				: ('>' . $this->content . '</' . $this->tag . '>')
+				: ('>' . (string) $this->content . '</' . $this->tag . '>')
 			)
 		);
 	}

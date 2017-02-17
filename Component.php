@@ -7,29 +7,40 @@ abstract class Component extends AbstractDom
 {
 	protected $attrs = [];
 
-	public function setAttrs(array $attrs)
+	public function set(array $attrs)
 	{
 		$this->attrs = array_merge($this->attrs, $attrs);
 
 		return $this;
 	}
 
-	public function hasAttr($attr)
+	public function has($attr)
 	{
 		return isset($this->attrs[$attr]);
 	}
 
-	public function __set($key, $value)
+	public function __set($attr, $val)
 	{
-		$this->attrs[$key] = (string) $value;
+		$this->attrs[$attr] = (string) $val;
+	}
+
+	public function __get($attr)
+	{
+		return (
+			isset($this->attrs[$attr]) ? $this->attrs[$attr] : null
+		);
 	}
 
 	public function toString()
 	{
 		$render = $this->render();
-		$render = (new DomWalker($render))->walk();
 
-		return $render;
+		return (string) (
+			(new DomWalker($render))
+				->preProcess()
+				->walk()
+				->postProcess()
+		);
 	}
 
 	public function __toString()

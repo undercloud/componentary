@@ -27,6 +27,12 @@ class Resolver
 
 	public function resolve(array $attrs = [])
 	{
-		return (string) $this->instance->newInstance()->setAttrs($attrs);
+		return (
+			$this
+				->instance
+				->newInstance()
+				->set($attrs)
+				->toString()
+		);
 	}
 }

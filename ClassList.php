@@ -1,13 +1,28 @@
 <?php
 namespace Elementary;
 
+use Exception;
+
 class ClassList
 {
+	/**
+	 * @var array
+	 */
 	private $list = [];
 
+	/**
+	 * @param array|string $list of classes
+	 */
 	public function __construct($list = [])
 	{
-		if (!is_array($list)) {
+		if (!is_array($list) or !is_string($list)) {
+			throw new Exception(sprintf(
+                'Argument 1 must be array or string, %s given',
+                gettype($list)
+            ));
+		}
+
+		if (is_string($list)) {
 			$list = explode(' ', $list);
 		}
 
