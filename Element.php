@@ -1,13 +1,13 @@
 <?php
 namespace Elementary;
 
+use Exception;
+
 class Element extends AbstractDom
 {
 	protected static $hooks = [
-		'area', 'base', 'br', 
-		'col', 'command', 'embed', 
-		'hr', 'img', 'input', 
-		'keygen', 'link', 'meta', 
+		'area', 'base', 'br', 'col', 'command', 'embed',
+		'hr', 'img', 'input', 'keygen', 'link', 'meta',
 		'param', 'source', 'track', 'wbr'
 	];
 
@@ -40,7 +40,7 @@ class Element extends AbstractDom
 		}
 
 		if ('class' == $key) {
-			$val = new ClassList($val);	
+			$val = new ClassList($val);
 		}
 
 		$this->attrs[$key] = $val;
@@ -54,7 +54,7 @@ class Element extends AbstractDom
 			}
 
 			if ('class' == $key) {
-				$this->attrs[$key] = new ClassList;	
+				$this->attrs[$key] = new ClassList;
 			}
 		}
 
@@ -116,23 +116,26 @@ class Element extends AbstractDom
 
 	public function render()
 	{
-		return (
-			'<' . $this->tag . 
-			(
-				$this->attrs
-				? (' ' . DomHelper::buildAttributes($this->attrs))
-				: ''
-			) . 
-			(
-				$this->selfClose
-				? ' />'
-				: ('>' . (string) $this->content . '</' . $this->tag . '>')
-			)
-		);
+        $s = '<' . $this->tag;
+        if ($this->attrs) {
+            $s .= ' ' . DomHelper::buildAttributes($this->attrs);
+        }
+
+        if ($this->selfClose) {
+            $s .= ' />';
+        } else {
+            $s .= '>' . (string) $this->content . '</' . $this->tag . '>';
+        }
+
+		return $s;
 	}
 
-	public function __toString()
-	{
-		return $this->render();
-	}
+    public function __toString()
+    {
+        try {
+            return $this->render();
+        } catch (Exception $e) {
+            return '<error>' . DomHelper::esc($e->getMessage()) . '</error>';
+        }
+    }
 }

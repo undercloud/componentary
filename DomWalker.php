@@ -2,7 +2,6 @@
 namespace Elementary;
 
 use Closure;
-use DOMDocument;
 
 class DomWalker
 {
@@ -15,7 +14,7 @@ class DomWalker
 		$this->render = $render;
 	}
 
-	public static function setPreprocessor(Closure $preprocessor)
+	public static function setPreprocessor(Closure $preprocessor = null)
 	{
 		self::$preprocessor = $preprocessor;
 	}
@@ -34,7 +33,7 @@ class DomWalker
 		return $this;
 	}
 
-	public static function setPostprocessor(Closure $postprocessor)
+	public static function setPostprocessor(Closure $postprocessor = null)
 	{
 		self::$postprocessor = $postprocessor;
 	}

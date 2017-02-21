@@ -40,9 +40,9 @@ class DomHelper
 	{
 		$pairs = [];
 		foreach ($args as $key => $val) {
-			if (null !== $val) {
+			if (null !== $val and !is_resource($val)) {
 				if (in_array($key, ['style', 'class'])) {
-					$val = (string) $val;	
+					$val = (string) $val;
 				}
 
 				$val = self::stringify($val);
