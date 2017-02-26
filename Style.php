@@ -2,6 +2,7 @@
 namespace Elementary;
 
 use Exception;
+
 /**
  * Inline style generator
  *
@@ -91,6 +92,8 @@ class Style
      *
      * @param string $key name
      * @param string $val property
+     *
+     * @return null
      */
     public function __set($key, $val)
     {

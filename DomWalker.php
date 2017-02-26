@@ -5,25 +5,54 @@ use Closure;
 
 class DomWalker
 {
+    /**
+     * @var string
+     */
 	private $render;
-	private static $preprocessor;
-	private static $postprocessor;
 
+    /**
+     * @var Closure|null
+     */
+	private static $preprocessor;
+
+    /**
+     * @var Closure|null
+     */
+    private static $postprocessor;
+
+    /**
+     * @param string $render content
+     */
 	public function __construct($render)
 	{
 		$this->render = $render;
 	}
 
+    /**
+     * Set preprocess handle
+     *
+     * @param Closure|null $preprocessor instance
+     */
 	public static function setPreprocessor(Closure $preprocessor = null)
 	{
 		self::$preprocessor = $preprocessor;
 	}
 
+    /**
+     * Get postprocess handle
+     *
+     * @return Closure|null
+     */
 	public static function getPreprocessor()
 	{
 		return self::$preprocessor;
 	}
 
+    /**
+     * Run preprocess handler
+     *
+     * @return self
+     */
 	public function preProcess()
 	{
 		if (self::$preprocessor instanceof Closure) {
@@ -33,16 +62,31 @@ class DomWalker
 		return $this;
 	}
 
+    /**
+     * Set postprocess handle
+     *
+     * @param Closure|null $postprocessor instance
+     */
 	public static function setPostprocessor(Closure $postprocessor = null)
 	{
 		self::$postprocessor = $postprocessor;
 	}
 
+    /**
+     * Get postprocess handle
+     *
+     * @return Closure|null
+     */
 	public static function getPostprocessor()
 	{
 		return self::$postprocessor;
 	}
 
+    /**
+     * Run postprocess handle
+     *
+     * @return self
+     */
 	public function postProcess()
 	{
 		if (self::$postprocessor instanceof Closure) {
@@ -52,6 +96,11 @@ class DomWalker
 		return $this;
 	}
 
+    /**
+     * Walk and replace
+     *
+     * @return self
+     */
 	public function walk()
 	{
 		$openBrace = false;
@@ -80,6 +129,13 @@ class DomWalker
 		return $this;
 	}
 
+    /**
+     * Replace tag
+     *
+     * @param string $tag dom element
+     *
+     * @return string
+     */
 	public function assign($tag)
 	{
 		if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
@@ -89,7 +145,7 @@ class DomWalker
 			$resolver = new Resolver($class);
 
 			if ($resolver->isValid()) {
-				$attrs = DomHelper::parseAttributes($tag);
+				$attrs = Helper::parseAttributes($tag);
 
 				return $resolver->resolve($attrs);
 			}
@@ -98,6 +154,11 @@ class DomWalker
 		return $tag;
 	}
 
+    /**
+     * Magic __toString
+     *
+     * @return string
+     */
 	public function __toString()
 	{
 		return (string) $this->render;

@@ -24,6 +24,14 @@ abstract class Component extends AbstractDom
 	protected static $prefix;
 
     /**
+     * @param array $attrs map
+     */
+    public function __construct(array $attrs = [])
+    {
+        $this->attrs = $attrs;
+    }
+
+    /**
      * Set namespace prefix
      *
      * @param string $prefix value

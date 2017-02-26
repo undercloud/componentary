@@ -3,139 +3,258 @@ namespace Elementary;
 
 use Exception;
 
+/**
+ * DOM elements factory
+ *
+ * @package  Elementary
+ * @author   undercloud <lodashes@gmail.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @link     http://github.com/undercloud/elementary
+ */
 class Element extends AbstractDom
 {
+    /**
+     * @var array
+     */
 	protected static $hooks = [
 		'area', 'base', 'br', 'col', 'command', 'embed',
 		'hr', 'img', 'input', 'keygen', 'link', 'meta',
 		'param', 'source', 'track', 'wbr'
 	];
 
+    /**
+     * @var boolean
+     */
 	protected $selfClose = false;
 
-	protected $tag;
+    /**
+     * @var string
+     */
+	public $tagName;
 
-	protected $attrs = [];
+    /**
+     * @var array
+     */
+	public $attributes = [];
 
+    /**
+     * @var string
+     */
 	protected $content;
 
-	public function __construct($tag)
+    /**
+     * @param string $tagName tag name
+     */
+	public function __construct($tagName)
 	{
-		$this->tag = $tag;
+		$this->tagName = $tagName;
 
-		if (in_array($tag, self::$hooks)) {
+		if (in_array($tagName, self::$hooks)) {
 			$this->selfClose = true;
 		}
 	}
 
+    /**
+     * Check if attribute exists
+     *
+     * @param string $name of attribute
+     *
+     * @return boolean
+     */
+    public function hasAttribute($name)
+    {
+        return isset($this->attributes[$name]);
+    }
+
+    /**
+     * Get attribute value
+     *
+     * @param string $name of attribute
+     *
+     * @return mixed
+     */
+    public function getAttribute($name)
+    {
+        if ('classList' == $name) {
+            $name = 'class';
+        }
+
+        if (!isset($this->attributes[$name])) {
+            if ('style' == $name) {
+                $this->attributes[$name] = new Style;
+            }
+
+            if ('class' == $name) {
+                $this->attributes[$name] = new ClassList;
+            }
+        }
+
+        return (
+            isset($this->attributes[$name]) ? $this->attributes[$name] : null
+        );
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param string $name of attribute
+     *
+     * @return boolean
+     */
+    public function removeAttribute($name)
+    {
+        if (isset($this->attributes[$name])) {
+            unset($this->attributes[$name]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set attribute
+     *
+     * @param string $name key
+     * @param mixed  $val  value
+     *
+     * @return null
+     */
+    public function setAttribute($name, $val)
+    {
+        if ('style' == $name) {
+            $val = new Style($val);
+        }
+
+        if ('classList' == $name) {
+            $name = 'class';
+            $val = new ClassList($val);
+        }
+
+        $this->attributes[$name] = $val;
+    }
+
+
+    public function appendChild($element, $escape = false)
+    {
+        $element = (string) $element;
+        if ($escape) {
+            $element = Helper::esc($element);
+        }
+
+        $this->selfClose = true;
+        $this->content .= $element;
+
+        return $this;
+    }
+
+    public function prependChild($element, $escape = false)
+    {
+        $element = (string) $element;
+        if ($escape) {
+            $element = Helper::esc($element);
+        }
+
+        $this->selfClose = true;
+        $this->content = $element . $this->content;
+
+        return $this;
+    }
+
+    /**
+     * Set content value
+     *
+     * @param string  $content value
+     * @param boolean $escape  flag
+     *
+     * @return self
+     */
+    public function setContent($content, $escape = true)
+    {
+        $this->content = $escape ? Helper::esc($content) : $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content value
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set self-close mode
+     *
+     * @param boolean $mode
+     *
+     * @return null
+     */
 	public function selfClose($mode)
 	{
 		$this->selfClose = $mode;
 	}
 
-	public function __set($key, $val)
+    /**
+     * Magic __set
+     *
+     * @param string $name key
+     * @param mixed  $val  val
+     *
+     * @return null
+     */
+	public function __set($name, $val)
 	{
-		if ('style' == $key) {
-			$val = new Style($val);
-		}
-
-		if ('class' == $key) {
-			$val = new ClassList($val);
-		}
-
-		$this->attrs[$key] = $val;
+        return $this->setAttribute($name, $val);
 	}
 
-	public function __get($key)
+    /**
+     * Magic __get
+     *
+     * @param string $name key
+     *
+     * @return mixed
+     */
+	public function __get($name)
 	{
-		if (!isset($this->attrs[$key])) {
-			if ('style' == $key) {
-				$this->attrs[$key] = new Style;
-			}
-
-			if ('class' == $key) {
-				$this->attrs[$key] = new ClassList;
-			}
-		}
-
-		return (
-			isset($this->attrs[$key]) ? $this->attrs[$key] : null
-		);
+        return $this->getAttribute($name);
 	}
 
-	public function attr()
-	{
-		$args = func_get_args();
-
-		switch (count($args)) {
-			case 0:
-				return $this->attrs;
-
-			case 1:
-				$key = $args[0];
-
-				if (is_array($key)) {
-					foreach ($key as $k => $v) {
-						$this->__set($k, $v);
-					}
-				} else {
-					return $this->__get($key);
-				}
-			break;
-
-			case 2:
-				list($key, $val) = $args;
-				$this->__set($key, $val);
-			break;
-		}
-
-		return $this;
-	}
-
-	public function content()
-	{
-		$args = func_get_args();
-
-		switch (count($args)) {
-			case 0:
-				return $this->content;
-
-			case 1:
-				$this->content = DomHelper::esc($args[0]);
-			break;
-
-			case 2:
-				list($content, $escape) = $args;
-
-				$this->content = $escape ? DomHelper::esc($content) : $content;
-			break;
-		}
-
-		return $this;
-	}
-
+    /**
+     * Render element
+     *
+     * @return string
+     */
 	public function render()
 	{
-        $s = '<' . $this->tag;
-        if ($this->attrs) {
-            $s .= ' ' . DomHelper::buildAttributes($this->attrs);
+        $element = '<' . $this->tagName;
+        if ($this->attributes) {
+            $element .= ' ' . Helper::buildAttributes($this->attributes);
         }
 
         if ($this->selfClose) {
-            $s .= ' />';
+            $element .= ' />';
         } else {
-            $s .= '>' . (string) $this->content . '</' . $this->tag . '>';
+            $element .= '>' . (string) $this->content . '</' . $this->tagName . '>';
         }
 
-		return $s;
+		return $element;
 	}
 
+    /**
+     * Magic __toString
+     *
+     * @return string
+     */
     public function __toString()
     {
         try {
             return $this->render();
         } catch (Exception $e) {
-            return '<error>' . DomHelper::esc($e->getMessage()) . '</error>';
+            return '<error>' . Helper::esc($e->getMessage()) . '</error>';
         }
     }
 }
