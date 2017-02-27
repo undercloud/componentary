@@ -35,8 +35,10 @@ abstract class Component extends AbstractDom
      * Set namespace prefix
      *
      * @param string $prefix value
+     *
+     * @return null
      */
-	public function setPrefix($prefix)
+	public static function setPrefix($prefix)
 	{
 		self::$prefix = rtrim($prefix, '\\');
 	}
@@ -46,7 +48,7 @@ abstract class Component extends AbstractDom
      *
      * @return string|null
      */
-	public function getPrefix()
+	public static function getPrefix()
 	{
 		return self::$prefix;
 	}
@@ -66,7 +68,7 @@ abstract class Component extends AbstractDom
 	}
 
     /**
-     * Check parameter exists
+     * Check attribute exists
      *
      * @param string $attr name
      * @return boolean

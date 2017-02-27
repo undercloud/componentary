@@ -31,10 +31,7 @@ class Style
         }
 
         if (is_array($style)) {
-            foreach ($style as $key => $val) {
-                $key = $this->normalizeKey($key);
-                $this->map[$key] = $val;
-            }
+            $this->apply($style);
         } else {
             $this->map = $this->parse($style);
         }
@@ -58,6 +55,21 @@ class Style
         }
 
         return $map;
+    }
+
+    /**
+     * Apply styles from map
+     *
+     * @param  array  $map pairs
+     *
+     * @return null
+     */
+    private function apply(array $map)
+    {
+        foreach ($map as $key => $val) {
+            $key = $this->normalizeKey($key);
+            $this->map[$key] = $val;
+        }
     }
 
     /**
@@ -113,6 +125,18 @@ class Style
         $key = $this->normalizeKey($key);
 
         return (isset($this->map[$key]) ? $this->map[$key] : null);
+    }
+
+    /**
+     * Magic __invoke
+     *
+     * @param array $map pairs
+     *
+     * @return null
+     */
+    public function __invoke(array $map)
+    {
+        $this->apply($map);
     }
 
     /**
