@@ -1,13 +1,13 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 /**
  * Scope storage
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class Scope
 {

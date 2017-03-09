@@ -1,15 +1,15 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 
 /**
  * Class helper
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class ClassList
 {
@@ -96,6 +96,18 @@ class ClassList
 
 		return $this;
 	}
+
+    /**
+     * Reset class list
+     *
+     * @return self
+     */
+    public function clear()
+    {
+        $this->list = [];
+
+        return $this;
+    }
 
     /**
      * Magic __toString

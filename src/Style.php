@@ -1,15 +1,15 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 
 /**
  * Inline style generator
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class Style
 {
@@ -157,6 +157,18 @@ class Style
         );
 
         return trim(implode(';', $pairs));
+    }
+
+    /**
+     * Reset styles
+     *
+     * @return self
+     */
+    public function clear()
+    {
+        $this->map = [];
+
+        return $this;
     }
 
     /**

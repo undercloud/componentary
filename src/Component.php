@@ -1,22 +1,24 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 
 /**
  * Class helper
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 abstract class Component extends AbstractDom
 {
+    use AttributesTrait;
+
     /**
      * @var array
      */
-	protected $attrs = [];
+	protected $attributes = [];
 
     /**
      * @var string|null
@@ -24,11 +26,11 @@ abstract class Component extends AbstractDom
 	protected static $prefix;
 
     /**
-     * @param array $attrs map
+     * @param array $attributes map
      */
-    public function __construct(array $attrs = [])
+    public function __construct(array $attributes = [])
     {
-        $this->attrs = $attrs;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -54,52 +56,27 @@ abstract class Component extends AbstractDom
 	}
 
     /**
-     * Set attributes
-     *
-     * @param array $attrs map
-     *
-     * @return self
-     */
-	public function set(array $attrs)
-	{
-		$this->attrs = array_merge($this->attrs, $attrs);
-
-		return $this;
-	}
-
-    /**
-     * Check attribute exists
-     *
-     * @param string $attr name
-     * @return boolean
-     */
-	public function has($attr)
-	{
-		return isset($this->attrs[$attr]);
-	}
-
-    /**
      * Magic __set
      *
-     * @param string $attr name
+     * @param string $name key
      * @param string $val  value
      */
-	public function __set($attr, $val)
+	public function __set($name, $val)
 	{
-		$this->attrs[$attr] = (string) $val;
+		$this->attributes[$name] = (string) $val;
 	}
 
     /**
      * Magic __get
      *
-     * @param string $attr name
+     * @param string $name key
      *
      * @return mixed
      */
-	public function __get($attr)
+	public function __get($name)
 	{
 		return (
-			isset($this->attrs[$attr]) ? $this->attrs[$attr] : null
+			isset($this->attributes[$name]) ? $this->attributes[$name] : null
 		);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 use DOMDocument;
@@ -7,10 +7,10 @@ use DOMDocument;
 /**
  * Helper stack
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class Helper
 {
@@ -63,6 +63,13 @@ class Helper
 		return $val;
 	}
 
+    /**
+     * Build attributes
+     *
+     * @param array $args map
+     *
+     * @return string
+     */
 	public static function buildAttributes(array $args)
 	{
 		$pairs = [];
@@ -70,6 +77,10 @@ class Helper
 			if (null !== $val and !is_resource($val)) {
 				if (in_array($key, ['style', 'class'])) {
 					$val = (string) $val;
+
+                    if (!$val) {
+                        continue;
+                    }
 				}
 
 				$val = self::stringify($val);
@@ -80,6 +91,13 @@ class Helper
 		return implode(' ', $pairs);
 	}
 
+    /**
+     * Extract attributes
+     *
+     * @param string $tag node
+     *
+     * @return array
+     */
 	public static function parseAttributes($tag)
 	{
 		libxml_clear_errors();

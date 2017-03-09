@@ -1,18 +1,20 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 
 /**
  * DOM elements factory
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class Element extends AbstractDom
 {
+    use AttributesTrait;
+
     /**
      * @var array
      */
@@ -55,6 +57,22 @@ class Element extends AbstractDom
 	}
 
     /**
+     * Normalize attribute name
+     *
+     * @param string $name of attribute
+     *
+     * @return string
+     */
+    private function normalizeAttribute($name)
+    {
+        if ('classList' == $name) {
+            $name = 'class';
+        }
+
+        return $name;
+    }
+
+    /**
      * Check if attribute exists
      *
      * @param string $name of attribute
@@ -63,6 +81,8 @@ class Element extends AbstractDom
      */
     public function hasAttribute($name)
     {
+        $name = $this->normalizeAttribute($name);
+
         return isset($this->attributes[$name]);
     }
 
@@ -75,9 +95,7 @@ class Element extends AbstractDom
      */
     public function getAttribute($name)
     {
-        if ('classList' == $name) {
-            $name = 'class';
-        }
+        $name = $this->normalizeAttribute($name);
 
         if (!isset($this->attributes[$name])) {
             if ('style' == $name) {
@@ -103,6 +121,8 @@ class Element extends AbstractDom
      */
     public function removeAttribute($name)
     {
+        $name = $this->normalizeAttribute($name);
+
         if (isset($this->attributes[$name])) {
             unset($this->attributes[$name]);
 
@@ -122,19 +142,35 @@ class Element extends AbstractDom
      */
     public function setAttribute($name, $val)
     {
+        $name = $this->normalizeAttribute($name);
+
         if ('style' == $name) {
-            $val = new Style($val);
+            $val = (
+                $val instanceof Componentary\Style
+                ? $val
+                : new Style($val)
+            );
         }
 
-        if ('classList' == $name) {
-            $name = 'class';
-            $val = new ClassList($val);
+        if ('class' == $name) {
+            $val = (
+                $val instanceof Componentary\ClassList
+                ? $val
+                : new ClassList($val)
+            );
         }
 
         $this->attributes[$name] = $val;
     }
 
-
+    /**
+     * Append child content
+     *
+     * @param  mixed   $element content
+     * @param  boolean $escape  flag
+     *
+     * @return self
+     */
     public function appendChild($element, $escape = false)
     {
         $element = (string) $element;
@@ -142,12 +178,20 @@ class Element extends AbstractDom
             $element = Helper::esc($element);
         }
 
-        $this->selfClose = true;
+        $this->selfClose = false;
         $this->content .= $element;
 
         return $this;
     }
 
+    /**
+     * Prepend child content
+     *
+     * @param  mixed   $element content
+     * @param  boolean $escape  flag
+     *
+     * @return self
+     */
     public function prependChild($element, $escape = false)
     {
         $element = (string) $element;
@@ -155,7 +199,7 @@ class Element extends AbstractDom
             $element = Helper::esc($element);
         }
 
-        $this->selfClose = true;
+        $this->selfClose = false;
         $this->content = $element . $this->content;
 
         return $this;
@@ -171,6 +215,7 @@ class Element extends AbstractDom
      */
     public function setContent($content, $escape = true)
     {
+        $this->selfClose = false;
         $this->content = $escape ? Helper::esc($content) : $content;
 
         return $this;

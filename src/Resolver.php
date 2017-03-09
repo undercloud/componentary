@@ -1,16 +1,16 @@
 <?php
-namespace Elementary;
+namespace Componentary;
 
 use Exception;
 use ReflectionClass;
 
 /**
- * Elementary tag resolver
+ * Componentary tag resolver
  *
- * @package  Elementary
+ * @package  Componentary
  * @author   undercloud <lodashes@gmail.com>
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/elementary
+ * @link     http://github.com/undercloud/componentary
  */
 class Resolver
 {
@@ -60,6 +60,6 @@ class Resolver
      */
 	public function resolve(array $attrs = [])
 	{
-		return (string) $this->instance->newInstance()->set($attrs);
+		return (string) $this->instance->newInstance()->setAttributes($attrs);
 	}
 }
