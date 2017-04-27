@@ -32,7 +32,7 @@ class Resolver
 				try {
 					$this->instance = new ReflectionClass($prefix .'\\' . $class);
 				} catch (Exception $e) {
-					/* ...*/
+					/* ... */
 				}
 			}
 		}
