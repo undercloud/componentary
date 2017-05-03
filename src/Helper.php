@@ -26,10 +26,10 @@ class Helper
      *
      * @return string
      */
-	public static function esc($string)
-	{
-		return htmlentities($string, ENT_QUOTES, self::$encoding, false);
-	}
+    public static function esc($string)
+    {
+        return htmlentities($string, ENT_QUOTES, self::$encoding, false);
+    }
 
     /**
      * Unescape string
@@ -50,18 +50,18 @@ class Helper
      *
      * @return string
      */
-	public static function stringify($val)
-	{
-		if (is_bool($val)) {
-			return $val ? 'true' : 'false';
-		}
+    public static function stringify($val)
+    {
+        if (is_bool($val)) {
+            return $val ? 'true' : 'false';
+        }
 
-		if (is_array($val) or is_object($val)) {
+        if (is_array($val) or is_object($val)) {
             return self::toJson($val, true);
-		}
+        }
 
-		return $val;
-	}
+        return $val;
+    }
 
     /**
      * Build attributes
@@ -70,26 +70,26 @@ class Helper
      *
      * @return string
      */
-	public static function buildAttributes(array $args)
-	{
-		$pairs = [];
-		foreach ($args as $key => $val) {
-			if (null !== $val and !is_resource($val)) {
-				if (in_array($key, ['style', 'class'])) {
-					$val = (string) $val;
+    public static function buildAttributes(array $args)
+    {
+        $pairs = [];
+        foreach ($args as $key => $val) {
+            if (null !== $val and !is_resource($val)) {
+                if (in_array($key, ['style', 'class'])) {
+                    $val = (string) $val;
 
                     if (!$val) {
                         continue;
                     }
-				}
+                }
 
-				$val = self::stringify($val);
-				$pairs[] = $key . '="' . self::esc($val) . '"';
-			}
-		}
+                $val = self::stringify($val);
+                $pairs[] = $key . '="' . self::esc($val) . '"';
+            }
+        }
 
-		return implode(' ', $pairs);
-	}
+        return implode(' ', $pairs);
+    }
 
     /**
      * Extract attributes
@@ -98,36 +98,36 @@ class Helper
      *
      * @return array
      */
-	public static function parseAttributes($tag)
-	{
-		libxml_clear_errors();
+    public static function parseAttributes($tag)
+    {
+        libxml_clear_errors();
 
-		$document = new DOMDocument('1.0', 'UTF-8');
-		if (!@$document->loadXML($tag)) {
-			$tag = debug_backtrace()[0]['args'][0];
-			$lastError = libxml_get_last_error();
+        $document = new DOMDocument('1.0', 'UTF-8');
+        if (!@$document->loadXML($tag)) {
+            $tag = debug_backtrace()[0]['args'][0];
+            $lastError = libxml_get_last_error();
 
-			throw new Exception($lastError->message . ' ' . $tag);
-		}
+            throw new Exception($lastError->message . ' ' . $tag);
+        }
 
-		$map = [];
+        $map = [];
 
-		$attrs = $document->documentElement->attributes;
+        $attrs = $document->documentElement->attributes;
 
-		if ($init = $attrs->getNamedItem('_init_')) {
-			$map = (array) json_decode($init->value, true);
-		}
+        if ($init = $attrs->getNamedItem('_init_')) {
+            $map = (array) json_decode($init->value, true);
+        }
 
-		foreach ($attrs as $item) {
-			if ('_init_' === $item->name) {
-				continue;
-			}
+        foreach ($attrs as $item) {
+            if ('_init_' === $item->name) {
+                continue;
+            }
 
-			$map[$item->name] = $item->value;
-		}
+            $map[$item->name] = $item->value;
+        }
 
-		return $map;
-	}
+        return $map;
+    }
 
     /**
      * Check if entity is blank

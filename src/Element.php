@@ -6,10 +6,10 @@ use Exception;
 /**
  * DOM elements factory
  *
- * @package  Componentary
- * @author   undercloud <lodashes@gmail.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/componentary
+ * @package Componentary
+ * @author  undercloud <lodashes@gmail.com>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/undercloud/componentary
  */
 class Element extends AbstractDom
 {
@@ -166,8 +166,8 @@ class Element extends AbstractDom
     /**
      * Append child content
      *
-     * @param  mixed   $element content
-     * @param  boolean $escape  flag
+     * @param mixed   $element content
+     * @param boolean $escape  flag
      *
      * @return self
      */
@@ -187,8 +187,8 @@ class Element extends AbstractDom
     /**
      * Prepend child content
      *
-     * @param  mixed   $element content
-     * @param  boolean $escape  flag
+     * @param mixed   $element content
+     * @param boolean $escape  flag
      *
      * @return self
      */
@@ -234,7 +234,7 @@ class Element extends AbstractDom
     /**
      * Set self-close mode
      *
-     * @param boolean $mode
+     * @param boolean $mode flag
      *
      * @return null
      */

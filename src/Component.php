@@ -18,12 +18,12 @@ abstract class Component extends AbstractDom
     /**
      * @var array
      */
-	protected $attributes = [];
+    protected $attributes = [];
 
     /**
      * @var string|null
      */
-	protected static $prefix;
+    protected static $prefix;
 
     /**
      * @param array $attributes map
@@ -40,31 +40,33 @@ abstract class Component extends AbstractDom
      *
      * @return null
      */
-	public static function setPrefix($prefix)
-	{
-		self::$prefix = rtrim($prefix, '\\');
-	}
+    public static function setPrefix($prefix)
+    {
+        self::$prefix = rtrim($prefix, '\\');
+    }
 
     /**
      * Get prefix name
      *
      * @return string|null
      */
-	public static function getPrefix()
-	{
-		return self::$prefix;
-	}
+    public static function getPrefix()
+    {
+        return self::$prefix;
+    }
 
     /**
      * Magic __set
      *
      * @param string $name key
      * @param string $val  value
+     *
+     * @return null
      */
-	public function __set($name, $val)
-	{
-		$this->attributes[$name] = (string) $val;
-	}
+    public function __set($name, $val)
+    {
+        $this->attributes[$name] = (string) $val;
+    }
 
     /**
      * Magic __get
@@ -73,31 +75,31 @@ abstract class Component extends AbstractDom
      *
      * @return mixed
      */
-	public function __get($name)
-	{
-		return (
-			isset($this->attributes[$name]) ? $this->attributes[$name] : null
-		);
-	}
+    public function __get($name)
+    {
+        return (
+            isset($this->attributes[$name]) ? $this->attributes[$name] : null
+        );
+    }
 
     /**
      * Magic __toString
      *
      * @return string
      */
-	public function __toString()
-	{
+    public function __toString()
+    {
         try {
             $render = $this->render();
 
             return (string) (
-        		(new DomWalker($render))
-        			->preProcess()
-        			->walk()
-        			->postProcess()
-        	);
+                (new DomWalker($render))
+                    ->preProcess()
+                    ->walk()
+                    ->postProcess()
+            );
         } catch (Exception $e) {
             return '<error>' . DomHelper::esc($e->getMessage()) . '</error>';
         }
-	}
+    }
 }

@@ -33,6 +33,8 @@ class Invoke
      * Set invoke name
      *
      * @param string $name key
+     *
+     * @return self
      */
     public function setName($name)
     {
@@ -68,6 +70,8 @@ class Invoke
      *
      * @param string $name key
      * @param mixed  $val  value
+     *
+     * @return self
      */
     public function setArg($name, $val)
     {
@@ -95,6 +99,8 @@ class Invoke
      *
      * @param array   $args   array
      * @param boolean $append save setuped values
+     *
+     * @return self
      */
     public function setArgs(array $args, $append = true)
     {
@@ -122,29 +128,19 @@ class Invoke
     {
         return implode(',', array_map(function ($item) {
             switch (gettype($item)) {
-            case 'NULL':
-                return 'null';
+                case 'NULL': return 'null';
+                case 'boolean': return $item ? 'true' : 'false';
+                case 'string': return "'{$item}'";
+                case 'array':
+                case 'object':
+                    return Helper::toJson($item);
 
-            case 'boolean':
-                return $item ? 'true' : 'false';
-            break;
+                case 'integer':
+                case 'double':
+                    return $item;
 
-            case 'string':
-                return "'{$item}'";
-            break;
-
-            case 'array':
-            case 'object':
-                return Helper::toJson($item);
-            break;
-
-            case 'integer':
-            case 'double':
-                return $item;
-            break;
-
-            default:
-                return 'undefined';
+                default:
+                    return 'undefined';
             }
         }, $this->args));
     }

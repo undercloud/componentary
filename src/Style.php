@@ -6,10 +6,10 @@ use Exception;
 /**
  * Inline style generator
  *
- * @package  Componentary
- * @author   undercloud <lodashes@gmail.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/componentary
+ * @package Componentary
+ * @author  undercloud <lodashes@gmail.com>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/undercloud/componentary
  */
 class Style
 {
@@ -60,7 +60,7 @@ class Style
     /**
      * Apply styles from map
      *
-     * @param  array  $map pairs
+     * @param array  $map pairs
      *
      * @return null
      */
@@ -90,6 +90,7 @@ class Style
      * Check property exists
      *
      * @param string $key name
+     *
      * @return boolean
      */
     public function has($key)
@@ -118,6 +119,7 @@ class Style
      * Magic __get
      *
      * @param string $key property
+     *
      * @return mixed
      */
     public function __get($key)

@@ -4,10 +4,10 @@ namespace Componentary;
 /**
  * Abstract DOM entity
  *
- * @package  Componentary
- * @author   undercloud <lodashes@gmail.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/undercloud/componentary
+ * @package Componentary
+ * @author  undercloud <lodashes@gmail.com>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/undercloud/componentary
  */
 abstract class AbstractDom
 {

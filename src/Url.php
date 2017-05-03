@@ -14,7 +14,7 @@ class Url
     /**
      * @var string
      */
-    private static $default_scheme = 'unsupportedschemetype';
+    private static $defaultScheme = 'unsupportedschemetype';
 
     /**
      * @var array
@@ -48,7 +48,7 @@ class Url
                 $this->query = [];
             }
 
-            if ($this->scheme === self::$default_scheme) {
+            if ($this->scheme === self::$defaultScheme) {
                 $this->scheme = null;
             }
         }
@@ -64,9 +64,9 @@ class Url
     private function normalize($url)
     {
         if (0 === stripos($url, '//')) {
-            $url = self::$default_scheme . ':' . $url;
+            $url = self::$defaultScheme . ':' . $url;
         } else if (false === stripos($url, '://')) {
-            $url = self::$default_scheme . '://' . $url;
+            $url = self::$defaultScheme . '://' . $url;
         }
 
         return $url;
@@ -75,7 +75,7 @@ class Url
     /**
      * Build URL from parts
      *
-     * @param  array $parts map
+     * @param array $parts map
      *
      * @return string
      */
