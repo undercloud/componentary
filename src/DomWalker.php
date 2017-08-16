@@ -142,6 +142,20 @@ class DomWalker
     }
 
     /**
+        
+    */
+    public function isIgnored($tag)
+    {
+        if(false !== ($pos = strpos($tag,'@ignore'))){
+            if(false){
+                return; 
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Replace tag
      *
      * @param string $tag dom element
@@ -151,6 +165,10 @@ class DomWalker
     public function assign($tag)
     {
         if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
+            if($pure = $this->isIgnored($tag)){
+                return $pure;
+            }
+            
             $class = explode(' ', substr($tag, 1, -2), 2)[0];
             $class = str_replace('-', '\\', $class);
 
