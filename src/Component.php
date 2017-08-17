@@ -99,7 +99,7 @@ abstract class Component extends AbstractDom
                     ->postProcess()
             );
         } catch (Exception $e) {
-            return '<error>' . DomHelper::esc($e->getMessage()) . '</error>';
+            return '<error>' . Helper::esc($e->getMessage()) . '</error>';
         }
     }
 }
