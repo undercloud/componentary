@@ -18,43 +18,68 @@ class Element extends AbstractDom
     /**
      * @var array
      */
-	protected static $hooks = [
-		'area', 'base', 'br', 'col', 'command', 'embed',
-		'hr', 'img', 'input', 'keygen', 'link', 'meta',
-		'param', 'source', 'track', 'wbr'
-	];
+    protected static $hooks = [
+        'area', 'base', 'br', 'col', 'command', 'embed',
+        'hr', 'img', 'input', 'keygen', 'link', 'meta',
+        'param', 'source', 'track', 'wbr'
+    ];
 
     /**
      * @var boolean
      */
-	protected $selfClose = false;
+    protected $selfClose = false;
 
     /**
      * @var string
      */
-	public $tagName;
+    protected $tagName;
 
     /**
      * @var array
      */
-	public $attributes = [];
+    protected $attributes = [];
 
     /**
      * @var string
      */
-	protected $content;
+    protected $content;
 
     /**
      * @param string $tagName tag name
      */
-	public function __construct($tagName)
-	{
-		$this->tagName = $tagName;
+    public function __construct($tagName, array $attributes = [], $content = null)
+    {
+        $this->tagName = $tagName;
 
-		if (in_array($tagName, self::$hooks)) {
-			$this->selfClose = true;
-		}
-	}
+        if (in_array($tagName, self::$hooks)) {
+            $this->selfClose = true;
+        }
+
+        $this->attributes = $attributes;
+        $this->content = $content;
+    }
+
+    /**
+     * Set tag name
+     *
+     * @param string $tagName tag name
+     *
+     * @return null
+     */
+    public function setTagName($tagName)
+    {
+        $this->tagName = $tagName;
+    }
+
+    /**
+     * Get tag name
+     *
+     * @return string
+     */
+    public function getTagName()
+    {
+        return $this->tagName;
+    }
 
     /**
      * Normalize attribute name
@@ -65,7 +90,7 @@ class Element extends AbstractDom
      */
     private function normalizeAttribute($name)
     {
-        if ('classList' == $name) {
+        if ('classList' === $name) {
             $name = 'class';
         }
 
@@ -107,9 +132,9 @@ class Element extends AbstractDom
             }
         }
 
-        return (
-            isset($this->attributes[$name]) ? $this->attributes[$name] : null
-        );
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        }
     }
 
     /**
@@ -144,7 +169,7 @@ class Element extends AbstractDom
     {
         $name = $this->normalizeAttribute($name);
 
-        if ('style' == $name) {
+        if ('style' === $name) {
             $val = (
                 $val instanceof Componentary\Style
                 ? $val
@@ -152,7 +177,7 @@ class Element extends AbstractDom
             );
         }
 
-        if ('class' == $name) {
+        if ('class' === $name) {
             $val = (
                 $val instanceof Componentary\ClassList
                 ? $val
@@ -238,10 +263,10 @@ class Element extends AbstractDom
      *
      * @return null
      */
-	public function selfClose($mode)
-	{
-		$this->selfClose = $mode;
-	}
+    public function selfClose($mode)
+    {
+        $this->selfClose = $mode;
+    }
 
     /**
      * Magic __set
@@ -251,10 +276,10 @@ class Element extends AbstractDom
      *
      * @return null
      */
-	public function __set($name, $val)
-	{
+    public function __set($name, $val)
+    {
         return $this->setAttribute($name, $val);
-	}
+    }
 
     /**
      * Magic __get
@@ -263,18 +288,18 @@ class Element extends AbstractDom
      *
      * @return mixed
      */
-	public function __get($name)
-	{
+    public function __get($name)
+    {
         return $this->getAttribute($name);
-	}
+    }
 
     /**
      * Render element
      *
      * @return string
      */
-	public function render()
-	{
+    public function render()
+    {
         $element = '<' . $this->tagName;
         if ($this->attributes) {
             $element .= ' ' . Helper::buildAttributes($this->attributes);
@@ -286,8 +311,8 @@ class Element extends AbstractDom
             $element .= '>' . (string) $this->content . '</' . $this->tagName . '>';
         }
 
-		return $element;
-	}
+        return $element;
+    }
 
     /**
      * Magic __toString

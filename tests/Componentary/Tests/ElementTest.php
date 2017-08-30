@@ -67,40 +67,5 @@ class ElementTest extends PHPUnit_Framework_TestCase
 
         $e->removeAttribute('style');
         $e->removeAttribute('classList');
-
-        $e->style = [
-            'color' => 'red',
-            'fontSize' => '12px'
-        ];
-
-        $this->assertTrue($e->style->has('color'));
-        $this->assertEquals('red', $e->style->color);
-
-        $this->assertEquals(
-            (string) $e,
-            '<e style="color:red;font-size:12px" />'
-        );
-
-        $e->removeAttribute('style');
-
-        $e->classList = ['one','two','three'];
-
-        $this->assertTrue($e->classList->has('one'));
-        $e->classList->remove('one');
-        $this->assertFalse($e->classList->has('one'));
-
-        $e->classList->add('six');
-        $this->assertTrue($e->classList->has('six'));
-
-        $this->assertTrue($e->classList->has('two'));
-        $e->classList->toggle('two');
-        $this->assertFalse($e->classList->has('two'));
-
-        $this->assertEquals(
-            (string) $e,
-            '<e class="three six" />'
-        );
-
-        $e->classList->clear();
     }
 }

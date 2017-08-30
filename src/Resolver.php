@@ -27,7 +27,7 @@ class Resolver
         try {
             $this->instance = new ReflectionClass($class);
         } catch (Exception $e) {
-            $prefix = Conponent::getPrefix();
+            $prefix = Component::getPrefix();
             if ($prefix) {
                 try {
                     $this->instance = new ReflectionClass($prefix .'\\' . $class);

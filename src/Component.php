@@ -77,9 +77,9 @@ abstract class Component extends AbstractDom
      */
     public function __get($name)
     {
-        return (
-            isset($this->attributes[$name]) ? $this->attributes[$name] : null
-        );
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        }
     }
 
     /**

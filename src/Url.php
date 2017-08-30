@@ -75,44 +75,42 @@ class Url
     /**
      * Build URL from parts
      *
-     * @param array $parts map
-     *
      * @return string
      */
-    private function join(array $parts)
+    private function join()
     {
         $inline = '';
-        if (isset($parts['scheme'])) {
-            $inline .= $parts['scheme'] . '://';
+        if (isset($this->scheme)) {
+            $inline .= $this->scheme . '://';
         }
 
-        if (isset($parts['user'])) {
-            $inline .= $parts['user'];
-            if (isset($parts['pass'])) {
-                $inline .= ':' . $parts['pass'];
+        if (isset($this->user)) {
+            $inline .= $this->user;
+            if (isset($this->pass)) {
+                $inline .= ':' . $this->pass;
             }
 
             $inline .= '@';
         }
 
-        if (isset($parts['host'])) {
-            $inline .= $parts['host'];
+        if (isset($this->host)) {
+            $inline .= $this->host;
         }
 
-        if (isset($parts['port'])) {
-            $inline .= ':' . $parts['port'];
+        if (isset($this->port)) {
+            $inline .= ':' . $this->port;
         }
 
-        if (isset($parts['path'])) {
-            $inline .= $parts['path'];
+        if (isset($this->path)) {
+            $inline .= $this->path;
         }
 
-        if (isset($parts['query'])) {
-            $inline .= '?' . $parts['query'];
+        if (isset($this->query)) {
+            $inline .= '?' . http_build_query((array) $this->query);
         }
 
-        if (isset($parts['fragment'])) {
-            $inline .= '#' . $parts['fragment'];
+        if (isset($this->fragment)) {
+            $inline .= '#' . $this->fragment;
         }
 
         return $inline;
@@ -125,14 +123,6 @@ class Url
      */
     public function __toString()
     {
-        $prepare = array_filter(self::$parts, function ($item) {
-            return null !== $item;
-        });
-
-        if (isset($prepare['query'])) {
-            $prepare['query'] = http_build_query($prepare['query']);
-        }
-
-        return $this->join($prepare);
+        return $this->join();
     }
 }

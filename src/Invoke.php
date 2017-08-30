@@ -22,11 +22,17 @@ class Invoke
     private $args = [];
 
     /**
+     * @var array
+     */
+    private $prototype = [];
+
+    /**
      * @param string $name invoke
      */
-    public function __construct($name = 'undefinedInvoke')
+    public function __construct($name = 'undefinedInvoke', array $prototype = [])
     {
         $this->name = $name;
+        $this->prototype = $prototype;
     }
 
     /**
@@ -51,6 +57,30 @@ class Invoke
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set prototype
+     *
+     * @param array $prototype declaration
+     *
+     * @return self
+     */
+    public function setPrototype(array $prototype)
+    {
+        $this->prototype = $prototype;
+
+        return $this;
+    }
+
+    /**
+     * Get prototype
+     *
+     * @return array
+     */
+    public function getPrototype()
+    {
+        return $this->prototype;
     }
 
     /**
@@ -90,7 +120,7 @@ class Invoke
     public function getArg($name)
     {
         if ($this->hasArg($name)) {
-        return $this->args[$name];
+            return $this->args[$name];
         }
     }
 
@@ -120,17 +150,49 @@ class Invoke
     }
 
     /**
+     * Magic __set
+     *
+     * @param string $name key
+     * @param mixed  $val  value
+     *
+     * @return null;
+     */
+    public function __set($name, $val)
+    {
+        $this->setArg($name, $val);
+    }
+
+    /**
+     * Get argument
+     *
+     * @param string $name key
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->getArg($name);
+    }
+
+    /**
      * Stringify arguments
      *
      * @return string
      */
     private function buildArgs()
     {
+        $order = (
+            $this->prototype
+                ? array_merge(array_flip($this->prototype), $this->args)
+                : $this->args
+        );
+
+        $thisis = $this;
         return implode(',', array_map(function ($item) {
             switch (gettype($item)) {
                 case 'NULL': return 'null';
                 case 'boolean': return $item ? 'true' : 'false';
-                case 'string': return "'{$item}'";
+                case 'string': return "'" . addslashes($item) . "'";
                 case 'array':
                 case 'object':
                     return Helper::toJson($item);
@@ -142,7 +204,7 @@ class Invoke
                 default:
                     return 'undefined';
             }
-        }, $this->args));
+        }, $order));
     }
 
     /**

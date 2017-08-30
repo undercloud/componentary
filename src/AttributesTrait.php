@@ -29,11 +29,13 @@ trait AttributesTrait
      * @param string $name key
      * @param mixed  $val  value
      *
-     * @return null
+     * @return self
      */
     public function setAttribute($name, $val)
     {
         $this->attributes[$name] = $val;
+
+        return $this;
     }
 
     /**
@@ -41,11 +43,13 @@ trait AttributesTrait
      *
      * @param array $attributes map
      *
-     * @return null
+     * @return self
      */
     public function setAttributes(array $attributes)
     {
         $this->attributes = array_merge($this->attributes, $attributes);
+
+        return $this;
     }
 
     /**
@@ -57,9 +61,9 @@ trait AttributesTrait
      */
     public function getAttribute($name)
     {
-        return (
-            isset($this->attributes[$name]) ? $this->attributes[$name] : null
-        );
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        }
     }
 
     /**

@@ -75,7 +75,17 @@ class Helper
         $pairs = [];
         foreach ($args as $key => $val) {
             if (null !== $val and !is_resource($val)) {
-                if (in_array($key, ['style', 'class'])) {
+                if (
+                    in_array($key, ['style', 'class'])
+                    or (
+                        is_object($val)
+                        and in_array(get_class($val), [
+                            'Componentary\Invoke',
+                            'Componentary\Url',
+                            'Componentary\Style',
+                            'Componentary\ClassList'
+                        ])
+                    )) {
                     $val = (string) $val;
 
                     if (!$val) {
@@ -114,15 +124,7 @@ class Helper
 
         $attrs = $document->documentElement->attributes;
 
-        if ($init = $attrs->getNamedItem('_init_')) {
-            $map = (array) json_decode($init->value, true);
-        }
-
         foreach ($attrs as $item) {
-            if ('_init_' === $item->name) {
-                continue;
-            }
-
             $map[$item->name] = $item->value;
         }
 
@@ -165,15 +167,13 @@ class Helper
     /**
      * Convert all unicode symbols \uxxxx to html entity &#xxxx;
      *
-     * @param string $s unicode string
+     * @param string $string unicode string
      *
      * @return string
      */
     public static function unicode($string)
     {
-        return preg_replace_callback(
-            '~\\\u([0-9]{4})~',
-            function($e){
+        return preg_replace_callback('~\\\u([0-9]{4})~', function ($e) {
                 return '&#' . hexdec((int)$e[1]) . ';';
             },
             $string
@@ -232,6 +232,7 @@ class Helper
             $tz = new \DateTimeZone($tz);
         }
         $datetime = new \DateTime($date, $tz);
+
         return $datetime->format($format);
     }
 
@@ -374,8 +375,8 @@ class Helper
     /**
      * Format number
      *
-     * @param $num       number
-     * @param $precision precisoin, default 0
+     * @param float $num       number
+     * @param int   $precision precisoin, default 0
      *
      * @return string
      */
