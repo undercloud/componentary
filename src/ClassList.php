@@ -48,7 +48,7 @@ class ClassList
     {
         if (!$this->has($class)) {
             $this->list[] = $class;
-       }
+        }
 
         return $this;
     }

@@ -51,10 +51,10 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar',$e->getContent());
 
         $e->prependChild('baz');
-        $this->assertEquals('bazbar',$e->getContent());
+        $this->assertEquals(['baz','bar'],$e->getContent());
 
         $e->appendChild('ban');
-        $this->assertEquals('bazbarban',$e->getContent());
+        $this->assertEquals(['baz','bar','ban'],$e->getContent());
     }
 
     public function testExtraAttributes()

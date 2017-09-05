@@ -30,7 +30,7 @@ class InvokeTest extends PHPUnit_Framework_TestCase
 
         //$this->assertEquals($expected, $js->getArgs());
 
-        $this->assertEquals("callBack('bar','baz','bzz')",(string) $js);
+        $this->assertEquals("callBack('bar','baz','bzz');",(string) $js);
     }
 
     public function testPrototype()
@@ -41,6 +41,6 @@ class InvokeTest extends PHPUnit_Framework_TestCase
         $js->baz = 1;
         $js->foo = 2;
 
-        $this->assertEquals("callBack(2,0,1)",(string) $js);
+        $this->assertEquals("callBack(2,0,1);",(string) $js);
     }
 }

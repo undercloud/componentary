@@ -51,6 +51,7 @@ class Style
         $map = [];
         foreach ($pairs as $pair) {
             list($key, $val) = explode(':', $pair, 2);
+            $key = $this->normalizeKey($key);
             $map[$key] = $val;
         }
 
@@ -60,7 +61,7 @@ class Style
     /**
      * Apply styles from map
      *
-     * @param array  $map pairs
+     * @param array $map pairs
      *
      * @return null
      */

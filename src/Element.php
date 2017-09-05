@@ -204,7 +204,12 @@ class Element extends AbstractDom
         }
 
         $this->selfClose = false;
-        $this->content .= $element;
+
+        if (!is_array($this->content)) {
+            $this->content = (array) $this->content;
+        }
+
+        $this->content[] = $element;
 
         return $this;
     }
@@ -225,7 +230,12 @@ class Element extends AbstractDom
         }
 
         $this->selfClose = false;
-        $this->content = $element . $this->content;
+
+        if (!is_array($this->content)) {
+            $this->content = (array) $this->content;
+        }
+
+        array_unshift($this->content, $element);
 
         return $this;
     }
@@ -308,7 +318,17 @@ class Element extends AbstractDom
         if ($this->selfClose) {
             $element .= ' />';
         } else {
-            $element .= '>' . (string) $this->content . '</' . $this->tagName . '>';
+            $element .= '>';
+
+            if (is_array($this->content)) {
+                $element = implode(array_map(function ($item) {
+                    return (string) $item;
+                }, $this->content));
+            } else {
+                $element .= (string) $this->content;
+            }
+
+            $element .= '</' . $this->tagName . '>';
         }
 
         return $element;

@@ -150,7 +150,7 @@ class DomWalker
      */
     public function isIgnored($tag)
     {
-        if(false !== ($pos = strpos($tag,'@ignore'))){
+        if (false !== ($pos = strpos($tag, '@ignore'))) {
             return str_replace('@ignore', '', $tag);
         }
 
@@ -167,7 +167,7 @@ class DomWalker
     public function assign($tag)
     {
         if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
-            if($pure = $this->isIgnored($tag)){
+            if ($pure = $this->isIgnored($tag)) {
                 return $pure;
             }
 

@@ -1,6 +1,8 @@
 <?php
 namespace Componentary;
 
+use Exception;
+
 /**
  * URL Builder
  *
@@ -11,11 +13,6 @@ namespace Componentary;
  */
 class Url
 {
-    /**
-     * @var string
-     */
-    private static $defaultScheme = 'unsupportedschemetype';
-
     /**
      * @var array
      */
@@ -34,9 +31,12 @@ class Url
                 $this->$part = null;
             }
         } else {
-            $url = $this->normalize($url);
-
+            $url = (string) $url;
             $parsed = @parse_url($url);
+
+            if (false === $parsed) {
+                throw new Exception('Wrong URL:' . $url);
+            }
 
             foreach (self::$parts as $part) {
                 $this->$part = ((isset($parsed[$part])) ? $parsed[$part] : null);
@@ -47,29 +47,7 @@ class Url
             } else {
                 $this->query = [];
             }
-
-            if ($this->scheme === self::$defaultScheme) {
-                $this->scheme = null;
-            }
         }
-    }
-
-    /**
-     * Normalize URL scheme
-     *
-     * @param string $url value
-     *
-     * @return string
-     */
-    private function normalize($url)
-    {
-        if (0 === stripos($url, '//')) {
-            $url = self::$defaultScheme . ':' . $url;
-        } else if (false === stripos($url, '://')) {
-            $url = self::$defaultScheme . '://' . $url;
-        }
-
-        return $url;
     }
 
     /**

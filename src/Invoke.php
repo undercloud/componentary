@@ -28,6 +28,7 @@ class Invoke
 
     /**
      * @param string $name invoke
+     * @param array  $prototype arguments
      */
     public function __construct($name = 'undefinedInvoke', array $prototype = [])
     {
@@ -214,6 +215,6 @@ class Invoke
      */
     public function __toString()
     {
-        return $this->name . '(' . $this->buildArgs() . ')';
+        return $this->name . '(' . $this->buildArgs() . ');';
     }
 }

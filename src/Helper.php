@@ -243,9 +243,12 @@ class Helper
      *
      * @return string capitalized string
     */
-    public static function capitalize($string)
+    public static function capitalize($string, $lower = false)
     {
-        $string = mb_strtolower($string, self::$encoding);
+        if ($lower) {
+            $string = mb_strtolower($string, self::$encoding);
+        }
+
         return mb_strtoupper(mb_substr($string, 0, 1, self::$encoding), self::$encoding) .
                mb_substr($string, 1, mb_strlen($string, self::$encoding), self::$encoding);
     }
