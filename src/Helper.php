@@ -72,25 +72,22 @@ class Helper
      */
     public static function buildAttributes(array $args)
     {
+        $hooks = function ($val) {
+            $except = [
+                'Componentary\Invoke',
+                'Componentary\Url',
+                'Componentary\Style',
+                'Componentary\ClassList'
+            ];
+
+            return in_array(get_class($val), $except);
+        };
+
         $pairs = [];
         foreach ($args as $key => $val) {
             if (null !== $val and !is_resource($val)) {
-                if (
-                    in_array($key, ['style', 'class'])
-                    or (
-                        is_object($val)
-                        and in_array(get_class($val), [
-                            'Componentary\Invoke',
-                            'Componentary\Url',
-                            'Componentary\Style',
-                            'Componentary\ClassList'
-                        ])
-                    )) {
+                if (is_object($val) and $hooks($val)) {
                     $val = (string) $val;
-
-                    if (!$val) {
-                        continue;
-                    }
                 }
 
                 $val = self::stringify($val);
@@ -147,7 +144,7 @@ class Helper
             ($what === '')    or
             ($what === null)  or
             ($what === false) or
-            (is_array($what)  and 0 == count($what))
+            ($what === [])
         );
     }
     /**
@@ -173,11 +170,11 @@ class Helper
      */
     public static function unicode($string)
     {
-        return preg_replace_callback('~\\\u([0-9]{4})~', function ($e) {
-                return '&#' . hexdec((int)$e[1]) . ';';
-            },
-            $string
-        );
+        $callback = function ($e) {
+            return '&#' . hexdec((int)$e[1]) . ';';
+        };
+
+        return preg_replace_callback('~\\\u([0-9]{4})~', $callback, $string);
     }
     /**
      * Template with placeholders
@@ -287,6 +284,25 @@ class Helper
     }
 
     /**
+     * Create abbreviation
+     *
+     * @param string $string [description]
+     *
+     * @return string
+     */
+    public static function abbr($string)
+    {
+        $string = (string) $string;
+
+        if (!self::isBlank($string)) {
+            $string = self::limit($string, 1, '.');
+            $string = self::upper($string);
+        }
+
+        return $string;
+    }
+
+    /**
      * Remove double whitespace
      *
      * @param string $string string
@@ -367,7 +383,7 @@ class Helper
      */
     public static function ordinal($cdnl)
     {
-        $cdnl = (integer)$cdnl;
+        $cdnl = (int) $cdnl;
         $c    = abs($cdnl) % 10;
         $ext  = ((abs($cdnl) %100 < 21 && abs($cdnl) %100 > 4) ? 'th'
             : (($c < 4) ? ($c < 3) ? ($c < 2) ? ($c < 1)
@@ -435,8 +451,18 @@ class Helper
      */
     public static function lorem($limit = 544)
     {
-        $n = 544;
-        $s = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. ";
+        $s = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, "
+            . "sed diam nonummy nibh euismod tincidunt ut laoreet dolore "
+            . "magna aliquam erat volutpat. Ut wisi enim ad minim veniam, "
+            . "quis nostrud exerci tation ullamcorper suscipit lobortis nisl "
+            . "ut aliquip ex ea commodo consequat. Duis autem vel eum iriure "
+            . "dolor in hendrerit in vulputate velit esse molestie consequat, "
+            . "vel illum dolore eu feugiat nulla facilisis at vero eros et "
+            . "accumsan et iusto odio dignissim qui blandit praesent luptatum "
+            . "zzril delenit augue duis dolore te feugait nulla facilisi. ";
+
+        $n = strlen($s);
+
         if ($limit > $n) {
             $s = str_repeat($s, (int)($limit / $n) + 1);
         }
@@ -460,7 +486,15 @@ class Helper
             JSON_HEX_APOS | JSON_HEX_QUOT
         );
 
-        $data = json_encode($data);
+        if (defined('JSON_PRESERVE_ZERO_FRACTION')) {
+            $flag |= JSON_PRESERVE_ZERO_FRACTION;
+        }
+
+        if (defined('JSON_PARTIAL_OUTPUT_ON_ERROR')) {
+            $flag |= JSON_PARTIAL_OUTPUT_ON_ERROR;
+        }
+
+        $data = json_encode($data, $flag);
 
         if (json_last_error()) {
             throw new Exception(json_last_error_msg());

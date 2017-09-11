@@ -16,7 +16,7 @@ class Url
     /**
      * @var array
      */
-    private static $parts = [
+    protected static $parts = [
         'scheme','user','pass','host',
         'port','path','query','fragment'
     ];
@@ -55,7 +55,7 @@ class Url
      *
      * @return string
      */
-    private function join()
+    protected function join()
     {
         $inline = '';
         if (isset($this->scheme)) {

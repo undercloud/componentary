@@ -24,10 +24,12 @@ class Style
     public function __construct($style = [])
     {
         if (!is_array($style) and !is_string($style)) {
-            throw new Exception(sprintf(
-                'Argument 1 must be array or string, %s given',
-                gettype($style)
-            ));
+            throw new Exception(
+                sprintf(
+                    'Argument 1 must be array or string, %s given',
+                    gettype($style)
+                )
+            );
         }
 
         if (is_array($style)) {
@@ -44,7 +46,7 @@ class Style
      *
      * @return array
      */
-    private function parse($style)
+    protected function parse($style)
     {
         $pairs = array_filter(explode(';', $style));
 
@@ -65,7 +67,7 @@ class Style
      *
      * @return null
      */
-    private function apply(array $map)
+    protected function apply(array $map)
     {
         foreach ($map as $key => $val) {
             $key = $this->normalizeKey($key);
@@ -80,11 +82,13 @@ class Style
      *
      * @return string
      */
-    private function normalizeKey($key)
+    protected function normalizeKey($key)
     {
-        return preg_replace_callback('~[A-Z]~', function ($match) {
+        $callback = function ($match) {
             return '-' . strtolower($match[0]);
-        }, $key);
+        };
+
+        return preg_replace_callback('~[A-Z]~', $callback, $key);
     }
 
     /**
@@ -131,23 +135,11 @@ class Style
     }
 
     /**
-     * Magic __invoke
-     *
-     * @param array $map pairs
-     *
-     * @return null
-     */
-    public function __invoke(array $map)
-    {
-        $this->apply($map);
-    }
-
-    /**
      * Build inline style
      *
      * @return string
      */
-    public function build()
+    protected function build()
     {
         $fn = function ($key, $val) {
             return $key . ':' . (string) $val;

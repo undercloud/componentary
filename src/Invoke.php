@@ -14,17 +14,17 @@ class Invoke
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var array
      */
-    private $args = [];
+    protected $args = [];
 
     /**
      * @var array
      */
-    private $prototype = [];
+    protected $prototype = [];
 
     /**
      * @param string $name invoke
@@ -180,7 +180,7 @@ class Invoke
      *
      * @return string
      */
-    private function buildArgs()
+    protected function buildArgs()
     {
         $order = (
             $this->prototype
@@ -188,24 +188,26 @@ class Invoke
                 : $this->args
         );
 
-        $thisis = $this;
-        return implode(',', array_map(function ($item) {
+        $mapper = function ($item) {
             switch (gettype($item)) {
-                case 'NULL': return 'null';
-                case 'boolean': return $item ? 'true' : 'false';
-                case 'string': return "'" . addslashes($item) . "'";
+                case 'NULL':
+                    return 'null';
+                case 'boolean':
+                    return $item ? 'true' : 'false';
+                case 'string':
+                    return "'" . addslashes($item) . "'";
                 case 'array':
                 case 'object':
                     return Helper::toJson($item);
-
                 case 'integer':
                 case 'double':
                     return $item;
-
                 default:
                     return 'undefined';
             }
-        }, $order));
+        };
+
+        return implode(',', array_map($mapper, $order));
     }
 
     /**

@@ -88,7 +88,7 @@ class Element extends AbstractDom
      *
      * @return string
      */
-    private function normalizeAttribute($name)
+    protected function normalizeAttribute($name)
     {
         if ('classList' === $name) {
             $name = 'class';
@@ -206,7 +206,7 @@ class Element extends AbstractDom
         $this->selfClose = false;
 
         if (!is_array($this->content)) {
-            $this->content = (array) $this->content;
+            $this->content = [$this->content];
         }
 
         $this->content[] = $element;
@@ -232,7 +232,7 @@ class Element extends AbstractDom
         $this->selfClose = false;
 
         if (!is_array($this->content)) {
-            $this->content = (array) $this->content;
+            $this->content = [$this->content];
         }
 
         array_unshift($this->content, $element);
@@ -251,7 +251,7 @@ class Element extends AbstractDom
     public function setContent($content, $escape = true)
     {
         $this->selfClose = false;
-        $this->content = $escape ? Helper::esc($content) : $content;
+        $this->content = $escape ? Helper::esc((string) $content) : $content;
 
         return $this;
     }
@@ -259,7 +259,7 @@ class Element extends AbstractDom
     /**
      * Get content value
      *
-     * @return string
+     * @return mixed
      */
     public function getContent()
     {
@@ -321,9 +321,11 @@ class Element extends AbstractDom
             $element .= '>';
 
             if (is_array($this->content)) {
-                $element = implode(array_map(function ($item) {
+                $mapper = function ($item) {
                     return (string) $item;
-                }, $this->content));
+                };
+
+                $element = implode(array_map($mapper, $this->content));
             } else {
                 $element .= (string) $this->content;
             }

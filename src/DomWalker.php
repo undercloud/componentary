@@ -16,17 +16,17 @@ class DomWalker
     /**
      * @var string
      */
-    private $render;
+    protected $render;
 
     /**
      * @var Closure|null
      */
-    private static $preprocessor;
+    protected static $preprocessor;
 
     /**
      * @var Closure|null
      */
-    private static $postprocessor;
+    protected static $postprocessor;
 
     /**
      * @param string $render content

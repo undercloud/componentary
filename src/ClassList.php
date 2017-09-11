@@ -16,7 +16,7 @@ class ClassList
     /**
      * @var array
      */
-    private $list = [];
+    protected $list = [];
 
     /**
      * @param array|string $list of classes
@@ -24,10 +24,12 @@ class ClassList
     public function __construct($list = [])
     {
         if (!is_array($list) and !is_string($list)) {
-            throw new Exception(sprintf(
-                'Argument 1 must be array or string, %s given',
-                gettype($list)
-            ));
+            throw new Exception(
+                sprintf(
+                    'Argument 1 must be array or string, %s given',
+                    gettype($list)
+                )
+            );
         }
 
         if (is_string($list)) {
@@ -42,15 +44,13 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return self
+     * @return null
      */
     public function add($class)
     {
         if (!$this->has($class)) {
             $this->list[] = $class;
         }
-
-        return $this;
     }
 
     /**
@@ -70,13 +70,11 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return self
+     * @return null
      */
     public function remove($class)
     {
         $this->list = array_diff($this->list, (array) $class);
-
-        return $this;
     }
 
     /**
@@ -84,7 +82,7 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return self
+     * @return null
      */
     public function toggle($class)
     {
@@ -93,20 +91,16 @@ class ClassList
         } else {
             $this->add($class);
         }
-
-        return $this;
     }
 
     /**
      * Reset class list
      *
-     * @return self
+     * @return null
      */
     public function clear()
     {
         $this->list = [];
-
-        return $this;
     }
 
     /**

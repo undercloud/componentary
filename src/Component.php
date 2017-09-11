@@ -83,6 +83,23 @@ abstract class Component extends AbstractDom
     }
 
     /**
+     * Static render
+     *
+     * @param  string $tag value
+     *
+     * @return string
+     */
+    public static function make($tag)
+    {
+        return (string) (
+            (new DomWalker($tag))
+                ->preProcess()
+                ->walk()
+                ->postProcess()
+        );
+    }
+
+    /**
      * Magic __toString
      *
      * @return string
@@ -92,12 +109,7 @@ abstract class Component extends AbstractDom
         try {
             $render = $this->render();
 
-            return (string) (
-                (new DomWalker($render))
-                    ->preProcess()
-                    ->walk()
-                    ->postProcess()
-            );
+            return $this->make($render);
         } catch (Exception $e) {
             return '<error>' . Helper::esc($e->getMessage()) . '</error>';
         }

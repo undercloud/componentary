@@ -74,7 +74,7 @@ class Scope
             return $default;
         }
 
-        throw new Exception('');
+        throw new Exception('Undefined index: ' . $key);
     }
 
     /**
@@ -98,24 +98,20 @@ class Scope
      *
      * @param string $key name
      *
-     * @return self
+     * @return null
      */
     public static function del($key)
     {
         unset(self::$map[$key]);
-
-        return self;
     }
 
     /**
      * Clear scope
      *
-     * @return self
+     * @return null
      */
     public static function clear()
     {
         self::$map = [];
-
-        return self;
     }
 }

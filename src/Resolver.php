@@ -17,7 +17,7 @@ class Resolver
     /**
      * @var ReflectionClass
      */
-    private $instance;
+    protected $instance;
 
     /**
      * @param string $class name
@@ -47,7 +47,7 @@ class Resolver
     {
         return (
             null !== $this->instance
-            and $this->instance->isSubclassOf(Component::class)
+            and $this->instance->isSubclassOf('Componentary\Component')
         );
     }
 
