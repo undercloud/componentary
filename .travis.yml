@@ -8,4 +8,5 @@ php:
   - 7.2
   - nightly
   - hhvm
+    dist: trusty
   - hhvm-nightly
