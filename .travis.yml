@@ -10,3 +10,4 @@ php:
   - hhvm
     dist: trusty
   - hhvm-nightly
+    dist: trusty
