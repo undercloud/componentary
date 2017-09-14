@@ -111,7 +111,7 @@ abstract class Component extends AbstractDom
 
             return $this->make($render);
         } catch (Exception $e) {
-            return '<error>' . Helper::esc($e->getMessage()) . '</error>';
+            return '<error>' . Utils::esc($e->getMessage()) . '</error>';
         }
     }
 }

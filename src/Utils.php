@@ -5,14 +5,14 @@ use Exception;
 use DOMDocument;
 
 /**
- * Helper stack
+ * Utils stack
  *
  * @package Componentary
  * @author  undercloud <lodashes@gmail.com>
  * @license https://opensource.org/licenses/MIT MIT
  * @link    http://github.com/undercloud/componentary
  */
-class Helper
+class Utils
 {
     /**
      * @var string

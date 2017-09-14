@@ -177,7 +177,7 @@ class DomWalker
             $resolver = new Resolver($class);
 
             if ($resolver->isValid()) {
-                $attrs = Helper::parseAttributes($tag);
+                $attrs = Utils::parseAttributes($tag);
 
                 return $resolver->resolve($attrs);
             }

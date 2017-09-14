@@ -198,7 +198,7 @@ class Invoke
                     return "'" . addslashes($item) . "'";
                 case 'array':
                 case 'object':
-                    return Helper::toJson($item);
+                    return Utils::toJson($item);
                 case 'integer':
                 case 'double':
                     return $item;

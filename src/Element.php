@@ -200,7 +200,7 @@ class Element extends AbstractDom
     {
         $element = (string) $element;
         if ($escape) {
-            $element = Helper::esc($element);
+            $element = Utils::esc($element);
         }
 
         $this->selfClose = false;
@@ -226,7 +226,7 @@ class Element extends AbstractDom
     {
         $element = (string) $element;
         if ($escape) {
-            $element = Helper::esc($element);
+            $element = Utils::esc($element);
         }
 
         $this->selfClose = false;
@@ -251,7 +251,7 @@ class Element extends AbstractDom
     public function setContent($content, $escape = true)
     {
         $this->selfClose = false;
-        $this->content = $escape ? Helper::esc((string) $content) : $content;
+        $this->content = $escape ? Utils::esc((string) $content) : $content;
 
         return $this;
     }
@@ -312,7 +312,7 @@ class Element extends AbstractDom
     {
         $element = '<' . $this->tagName;
         if ($this->attributes) {
-            $element .= ' ' . Helper::buildAttributes($this->attributes);
+            $element .= ' ' . Utils::buildAttributes($this->attributes);
         }
 
         if ($this->selfClose) {
@@ -346,7 +346,7 @@ class Element extends AbstractDom
         try {
             return $this->render();
         } catch (Exception $e) {
-            return '<error>' . Helper::esc($e->getMessage()) . '</error>';
+            return '<error>' . Utils::esc($e->getMessage()) . '</error>';
         }
     }
 }
