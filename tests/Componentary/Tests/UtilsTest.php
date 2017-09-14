@@ -16,6 +16,6 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Utils::stringify(null), '');
         $this->assertEquals(Utils::stringify(''), '');
         $this->assertEquals(Utils::stringify([]), '[]');
-        $this->assertEquals(Utils::stringify(new stdClass), '{}');
+        $this->assertEquals(Utils::stringify(new \stdClass), '{}');
     }
 }
