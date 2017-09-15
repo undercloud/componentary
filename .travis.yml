@@ -7,7 +7,3 @@ php:
   - 7.1
   - 7.2
   - nightly
-  - hhvm
-    dist: trusty
-  - hhvm-nightly
-    dist: trusty
