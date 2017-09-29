@@ -16,5 +16,77 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Utils::stringify(null), '');
         $this->assertEquals(Utils::stringify(''), '');
         $this->assertEquals(Utils::stringify([]), '[]');
+
+        $this->assertTrue(Utils::isBlank(''));
+        $this->assertTrue(Utils::isBlank('   '));
+        $this->assertTrue(Utils::isBlank(null));
+        $this->assertTrue(Utils::isBlank(false));
+        $this->assertTrue(Utils::isBlank([]));
+        $this->assertFalse(Utils::isBlank(0));
+        $this->assertFalse(Utils::isBlank('0'));
+
+        $this->assertTrue(Utils::isEmpty(' '));
+
+        $this->assertEquals(Utils::unicode('\u2665\u2600'), '&#9829;&#9728;');
+    }
+
+    public function testTemplate()
+    {
+        $expect = 'Hello John, complete at: 89%';
+        $tmpl = Utils::template('Hello {1}, complete at: {2}%', 'John', 89);
+
+        $this->assertEquals($tmpl,$expect);
+    }
+
+    public function testManipulate()
+    {
+        $this->assertEquals('UPPER', Utils::upper('upper'));
+        $this->assertEquals('lower', Utils::lower('LOWER'));
+        $this->assertEquals('Hello', Utils::capitalize('hello'));
+        $this->assertEquals('Hello', Utils::capitalize('HELLO', true));
+        $this->assertEquals('Hello World', Utils::capitalizeAll('hello world'));
+    }
+
+    public function testMisc()
+    {
+        $this->assertEquals('L.A.', Utils::abbr('Los') . Utils::abbr('Angeles'));
+        $this->assertEquals(' hello world ',Utils::whitespace('  hello  world  '));
+
+        $this->assertEquals('1st', Utils::ordinal(1));
+        $this->assertEquals('2nd', Utils::ordinal(2));
+        $this->assertEquals('3rd', Utils::ordinal(3));
+        $this->assertEquals('5th', Utils::ordinal(5));
+    }
+
+    public function testNum()
+    {
+        $this->assertEquals('12 345 678.909', Utils::number(12345678.90865, 3));
+
+        $this->assertEquals('45.5 Mb', Utils::bytesHuman(47710208));
+        $this->assertEquals('-12 Gb', Utils::bytesHuman(1024 * 1024 * 1024 * -12));
+
+        $this->assertEquals('45.5 M', Utils::roundHuman(45.5 * 1000 * 1000));
+        $this->assertEquals('-12 B', Utils::roundHuman(1000 * 1000 * 1000 * -12));
+    }
+
+    public function testDate()
+    {
+
+    }
+
+    public function testAttr()
+    {
+        // buildAttributes
+        // parseAttributes
+    }
+
+    public function testLimit()
+    {
+
+    }
+
+    public function testJson()
+    {
+
     }
 }

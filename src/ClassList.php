@@ -33,7 +33,7 @@ class ClassList
         }
 
         if (is_string($list)) {
-            $list = explode(' ', $list);
+            $list = array_filter(explode(' ', $list));
         }
 
         $this->list = $list;
@@ -110,6 +110,6 @@ class ClassList
      */
     public function __toString()
     {
-        return trim(implode(' ', $this->list));
+        return implode(' ', $this->list);
     }
 }

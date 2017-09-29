@@ -28,7 +28,7 @@ class InvokeTest extends PHPUnit_Framework_TestCase
             'axx' => 'bzz'
         ];
 
-        //$this->assertEquals($expected, $js->getArgs());
+        $this->assertEquals($expected, $js->getArgs());
 
         $this->assertEquals("callBack('bar','baz','bzz');",(string) $js);
     }

@@ -34,13 +34,11 @@ class Scope
      * @param string $key name
      * @param mixed  $val value
      *
-     * @return self
+     * @return null
      */
     public static function set($key, $val)
     {
         self::$map[$key] = $val;
-
-        return self;
     }
 
     /**
@@ -88,7 +86,7 @@ class Scope
     public static function getOnce($key, $default = null)
     {
         $val = self::get($key, $default);
-        self::del($val);
+        self::del($key);
 
         return $val;
     }

@@ -14,7 +14,7 @@ abstract class AbstractDom
     /**
      *  Abstract DOM declaration
      *
-     * @return strind
+     * @return string
      */
     abstract public function render();
 }

@@ -12,6 +12,11 @@ namespace Componentary;
 trait AttributesTrait
 {
     /**
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
      * Check if attribute exists
      *
      * @param string $name of attribute
@@ -88,5 +93,30 @@ trait AttributesTrait
         }
 
         return false;
+    }
+
+    /**
+     * Magic __set
+     *
+     * @param string $name key
+     * @param mixed  $val  val
+     *
+     * @return null
+     */
+    public function __set($name, $val)
+    {
+        return $this->setAttribute($name, $val);
+    }
+
+    /**
+     * Magic __get
+     *
+     * @param string $name key
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->getAttribute($name);
     }
 }

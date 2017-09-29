@@ -147,6 +147,7 @@ class Utils
             ($what === [])
         );
     }
+
     /**
      * Check if entity is empty
      *
@@ -161,6 +162,7 @@ class Utils
         }
         return @empty($what);
     }
+
     /**
      * Convert all unicode symbols \uxxxx to html entity &#xxxx;
      *
@@ -176,6 +178,7 @@ class Utils
 
         return preg_replace_callback('~\\\u([0-9]{4})~', $callback, $string);
     }
+
     /**
      * Template with placeholders
      *
@@ -185,6 +188,8 @@ class Utils
     {
         $args = func_get_args();
         $tmpl = array_shift($args);
+        $tmpl = str_replace('%', '%%', $tmpl);
+
         $args = array_map(
             function ($item) {
                 if (is_array($item)) {
@@ -202,6 +207,7 @@ class Utils
             },
             $args
         );
+
         $tmpl = preg_replace_callback(
             '~\{[0-9]{1,2}\}~',
             function ($e) {
@@ -209,8 +215,10 @@ class Utils
             },
             $tmpl
         );
+
         return vsprintf($tmpl, $args);
     }
+
     /**
      * Date helper
      *
@@ -249,6 +257,7 @@ class Utils
         return mb_strtoupper(mb_substr($string, 0, 1, self::$encoding), self::$encoding) .
                mb_substr($string, 1, mb_strlen($string, self::$encoding), self::$encoding);
     }
+
     /**
      * Capitalize all words in string
      *
@@ -260,6 +269,7 @@ class Utils
     {
         return mb_convert_case($string, MB_CASE_TITLE, self::$encoding);
     }
+
     /**
      * Uppercase string
      *
@@ -271,6 +281,7 @@ class Utils
     {
         return mb_strtoupper($string, self::$encoding);
     }
+
     /**
      * Lowercase string
      *
@@ -313,6 +324,7 @@ class Utils
     {
         return preg_replace('/\s+/', ' ', $string);
     }
+
     /**
      * Limit string length
      *
@@ -330,6 +342,7 @@ class Utils
             return $string;
         }
     }
+
     /**
      * Limit string length soft
      *
@@ -352,6 +365,7 @@ class Utils
             return $string;
         }
     }
+
     /**
      * Limit string length by middle
      *
@@ -374,6 +388,7 @@ class Utils
             return $string;
         }
     }
+
     /**
      * Ordinal number
      *
@@ -391,6 +406,7 @@ class Utils
         );
         return $cdnl . $ext;
     }
+
     /**
      * Format number
      *
@@ -403,6 +419,7 @@ class Utils
     {
         return number_format($num, $precision, '.', ' ');
     }
+
     /**
      * Bytes to human readable
      *
@@ -413,15 +430,16 @@ class Utils
      */
     public static function bytesHuman($size, $precision = 2)
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $units = array('B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb');
         foreach ($units as $unit) {
-            if ($size >= 1024 && $unit != 'YB') {
+            if (abs($size) >= 1024 && $unit != 'Yb') {
                 $size = ($size / 1024);
             } else {
                 return round($size, $precision) . ' ' . $unit;
             }
         }
     }
+
     /**
      * Long number to human readable
      *
@@ -432,9 +450,9 @@ class Utils
      */
     public static function roundHuman($size, $precision = 2)
     {
-        $units = array('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
+        $units = array('', 'K', 'M', 'B', 'T', 'Qa', 'Qi');
         foreach ($units as $unit) {
-            if ($size >= 1000 && $unit != 'Y') {
+            if (abs($size) >= 1000 && $unit != 'Qi') {
                 $size = ($size / 1000);
             } else {
                 return round($size, $precision) . ($unit ? (' ' . $unit) : '');

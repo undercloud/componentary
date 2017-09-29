@@ -1,4 +1,6 @@
 <?php
+error_reporting(-1);
+
 require_once __DIR__ . '/../src/AbstractDom.php';
 require_once __DIR__ . '/../src/AttributesTrait.php';
 require_once __DIR__ . '/../src/Element.php';

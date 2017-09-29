@@ -16,11 +16,6 @@ abstract class Component extends AbstractDom
     use AttributesTrait;
 
     /**
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
      * @var string|null
      */
     protected static $prefix;
@@ -53,33 +48,6 @@ abstract class Component extends AbstractDom
     public static function getPrefix()
     {
         return self::$prefix;
-    }
-
-    /**
-     * Magic __set
-     *
-     * @param string $name key
-     * @param string $val  value
-     *
-     * @return null
-     */
-    public function __set($name, $val)
-    {
-        $this->attributes[$name] = (string) $val;
-    }
-
-    /**
-     * Magic __get
-     *
-     * @param string $name key
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
     }
 
     /**

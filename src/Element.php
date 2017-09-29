@@ -35,11 +35,6 @@ class Element extends AbstractDom
     protected $tagName;
 
     /**
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
      * @var string
      */
     protected $content;
@@ -276,31 +271,6 @@ class Element extends AbstractDom
     public function selfClose($mode)
     {
         $this->selfClose = $mode;
-    }
-
-    /**
-     * Magic __set
-     *
-     * @param string $name key
-     * @param mixed  $val  val
-     *
-     * @return null
-     */
-    public function __set($name, $val)
-    {
-        return $this->setAttribute($name, $val);
-    }
-
-    /**
-     * Magic __get
-     *
-     * @param string $name key
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->getAttribute($name);
     }
 
     /**

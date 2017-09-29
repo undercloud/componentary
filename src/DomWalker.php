@@ -4,7 +4,7 @@ namespace Componentary;
 use Closure;
 
 /**
- * Tag replacer
+ * Tag resolver
  *
  * @package Componentary
  * @author  undercloud <lodashes@gmail.com>
@@ -19,12 +19,12 @@ class DomWalker
     protected $render;
 
     /**
-     * @var Closure|null
+     * @var callable|null
      */
     protected static $preprocessor;
 
     /**
-     * @var Closure|null
+     * @var callable|null
      */
     protected static $postprocessor;
 
@@ -39,11 +39,11 @@ class DomWalker
     /**
      * Set preprocess handle
      *
-     * @param Closure|null $preprocessor instance
+     * @param callable $preprocessor instance
      *
      * @return null
      */
-    public static function setPreprocessor(Closure $preprocessor = null)
+    public static function setPreprocessor(callable $preprocessor)
     {
         self::$preprocessor = $preprocessor;
     }
@@ -51,7 +51,7 @@ class DomWalker
     /**
      * Get postprocess handle
      *
-     * @return Closure|null
+     * @return callable|null
      */
     public static function getPreprocessor()
     {
@@ -65,7 +65,7 @@ class DomWalker
      */
     public function preProcess()
     {
-        if (self::$preprocessor instanceof Closure) {
+        if (null !== self::$preprocessor) {
             $this->render = call_user_func(self::$preprocessor, $this->render);
         }
 
@@ -75,11 +75,11 @@ class DomWalker
     /**
      * Set postprocess handle
      *
-     * @param Closure|null $postprocessor instance
+     * @param callable $postprocessor instance
      *
      * @return null
      */
-    public static function setPostprocessor(Closure $postprocessor = null)
+    public static function setPostprocessor(callable $postprocessor)
     {
         self::$postprocessor = $postprocessor;
     }
@@ -87,7 +87,7 @@ class DomWalker
     /**
      * Get postprocess handle
      *
-     * @return Closure|null
+     * @return callable|null
      */
     public static function getPostprocessor()
     {
@@ -101,7 +101,7 @@ class DomWalker
      */
     public function postProcess()
     {
-        if (self::$postprocessor instanceof Closure) {
+        if (null !== self::$postprocessor) {
             $this->render = call_user_func(self::$postprocessor, $this->render);
         }
 
@@ -166,6 +166,7 @@ class DomWalker
      */
     public function assign($tag)
     {
+
         if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
             if ($pure = $this->isIgnored($tag)) {
                 return $pure;

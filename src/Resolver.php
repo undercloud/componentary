@@ -60,6 +60,9 @@ class Resolver
      */
     public function resolve(array $attrs = [])
     {
-        return (string) $this->instance->newInstance()->setAttributes($attrs);
+        $instance = $this->instance->newInstance();
+        $instance->setAttributes($attrs);
+
+        return (string) $instance;
     }
 }
