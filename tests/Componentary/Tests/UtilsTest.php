@@ -69,24 +69,56 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('-12 B', Utils::roundHuman(1000 * 1000 * 1000 * -12));
     }
 
-    public function testDate()
-    {
-
-    }
-
     public function testAttr()
     {
-        // buildAttributes
-        // parseAttributes
+        $invoke = new \Componentary\Invoke('alert');
+
+        $url = new \Componentary\Url;
+        $url->scheme = 'http';
+        $url->host = 'google.com';
+
+        $style = new \Componentary\Style;
+        $style->color = 'red';
+
+        $class = new \Componentary\ClassList;
+        $class->add('main');
+
+        $expect = (
+            'id="page" ' .
+            'href="http://google.com" ' .
+            'style="color:red" ' .
+            'class="main" ' .
+            'onclick="alert();"'
+        );
+
+        $attributes = [
+            'id'    => 'page',
+            'href'  => $url,
+            'style' => $style,
+            'class' => $class,
+            'onclick' => $invoke
+        ];
+
+        $this->assertEquals($expect, Utils::buildAttributes($attributes));
+        $this->assertEquals($attributes, Utils::parseAttributes('<a ' . $expect . ' />'));
     }
 
     public function testLimit()
     {
+        $lorem = 'Lorem ipsum dolor sit amet';
 
+        $this->assertEquals(Utils::limit($lorem, 10), 'Lorem ipsu...');
+        $this->assertEquals(Utils::limitWords($lorem, 10), 'Lorem ipsum...');
+        $this->assertEquals(Utils::limitMiddle($lorem, 12), 'Lore...amet');
     }
 
     public function testJson()
     {
-
+        $this->assertEquals(Utils::stringify(new \stdClass), '{}');
+        $this->assertEquals(Utils::stringify([]), '[]');
+        $this->assertEquals(Utils::stringify(false), 'false');
+        $this->assertEquals(Utils::stringify(''), '');
+        $this->assertEquals(Utils::stringify(null), '');
+        $this->assertEquals(Utils::stringify('string'), 'string');
     }
 }

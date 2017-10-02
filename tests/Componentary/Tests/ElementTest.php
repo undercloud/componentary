@@ -63,9 +63,9 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $e->selfClose(true);
 
         $this->assertTrue($e->style instanceof \Componentary\Style);
-        $this->assertTrue($e->classList instanceof \Componentary\ClassList);
+        $this->assertTrue($e->class instanceof \Componentary\ClassList);
 
         $e->removeAttribute('style');
-        $e->removeAttribute('classList');
+        $e->removeAttribute('class');
     }
 }

@@ -220,28 +220,6 @@ class Utils
     }
 
     /**
-     * Date helper
-     *
-     * @param mixed  $date   date
-     * @param string $format date format
-     * @param mixed  $tz     timezone
-     *
-     * @return string
-     */
-    public static function date($date, $format = 'Y-m-d H:i:s', $tz = null)
-    {
-        if ($tz) {
-            if (is_numeric($tz)) {
-                $tz = timezone_name_from_abbr('', $tz, 0);
-            }
-            $tz = new \DateTimeZone($tz);
-        }
-        $datetime = new \DateTime($date, $tz);
-
-        return $datetime->format($format);
-    }
-
-    /**
      * Capitalize string
      *
      * @param string $string string
@@ -514,8 +492,12 @@ class Utils
 
         $data = json_encode($data, $flag);
 
-        if (json_last_error()) {
-            throw new Exception(json_last_error_msg());
+        if ($error_code = json_last_error()) {
+            throw new Exception(
+                function_exists('json_last_error_msg')
+                ? json_last_error_msg()
+                : 'Cannot encode to JSON: ' . $error_code
+            );
         }
 
         if ($escape) {
@@ -523,5 +505,32 @@ class Utils
         }
 
         return $data;
+    }
+
+    /**
+     * Parse JSON
+     *
+     * @param string  $json  string
+     * @param boolean $assoc if TRUE, returned objects will be cast into assoc arrays
+     *
+     * @return mixed
+     */
+    public static function fromJson($json, $assoc = false)
+    {
+        $json = (string) $json;
+
+        json_encode(null);
+
+        $json = json_parse($json);
+
+        if ($error_code = json_last_error()) {
+            throw new Exception(
+                function_exists('json_last_error_msg')
+                ? json_last_error_msg()
+                : 'Cannot parse JSON string: ' . $error_code
+            );
+        }
+
+        return $json;
     }
 }

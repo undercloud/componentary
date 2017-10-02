@@ -11,24 +11,24 @@ class ClassTest extends PHPUnit_Framework_TestCase
         $e = new Element('e');
         $e->selfClose(true);
 
-        $e->classList = ['one','two','three'];
+        $e->class = ['one','two','three'];
 
-        $this->assertTrue($e->classList->has('one'));
-        $e->classList->remove('one');
-        $this->assertFalse($e->classList->has('one'));
+        $this->assertTrue($e->class->has('one'));
+        $e->class->remove('one');
+        $this->assertFalse($e->class->has('one'));
 
-        $e->classList->add('six');
-        $this->assertTrue($e->classList->has('six'));
+        $e->class->add('six');
+        $this->assertTrue($e->class->has('six'));
 
-        $this->assertTrue($e->classList->has('two'));
-        $e->classList->toggle('two');
-        $this->assertFalse($e->classList->has('two'));
+        $this->assertTrue($e->class->has('two'));
+        $e->class->toggle('two');
+        $this->assertFalse($e->class->has('two'));
 
         $this->assertEquals(
             (string) $e,
             '<e class="three six" />'
         );
 
-        $e->classList->clear();
+        $e->class->clear();
     }
 }

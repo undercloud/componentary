@@ -77,36 +77,6 @@ class Element extends AbstractDom
     }
 
     /**
-     * Normalize attribute name
-     *
-     * @param string $name of attribute
-     *
-     * @return string
-     */
-    protected function normalizeAttribute($name)
-    {
-        if ('classList' === $name) {
-            $name = 'class';
-        }
-
-        return $name;
-    }
-
-    /**
-     * Check if attribute exists
-     *
-     * @param string $name of attribute
-     *
-     * @return boolean
-     */
-    public function hasAttribute($name)
-    {
-        $name = $this->normalizeAttribute($name);
-
-        return isset($this->attributes[$name]);
-    }
-
-    /**
      * Get attribute value
      *
      * @param string $name of attribute
@@ -115,8 +85,6 @@ class Element extends AbstractDom
      */
     public function getAttribute($name)
     {
-        $name = $this->normalizeAttribute($name);
-
         if (!isset($this->attributes[$name])) {
             if ('style' == $name) {
                 $this->attributes[$name] = new Style;
@@ -133,26 +101,6 @@ class Element extends AbstractDom
     }
 
     /**
-     * Remove attribute
-     *
-     * @param string $name of attribute
-     *
-     * @return boolean
-     */
-    public function removeAttribute($name)
-    {
-        $name = $this->normalizeAttribute($name);
-
-        if (isset($this->attributes[$name])) {
-            unset($this->attributes[$name]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Set attribute
      *
      * @param string $name key
@@ -162,8 +110,6 @@ class Element extends AbstractDom
      */
     public function setAttribute($name, $val)
     {
-        $name = $this->normalizeAttribute($name);
-
         if ('style' === $name) {
             $val = (
                 $val instanceof Componentary\Style
