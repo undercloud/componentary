@@ -6,6 +6,10 @@
         class_alias('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b0d70d55ec4db9242f0d87d415084b6157042832
     require_once __DIR__ . '/../src/AbstractDom.php';
     require_once __DIR__ . '/../src/AttributesTrait.php';
     require_once __DIR__ . '/../src/Element.php';
@@ -18,5 +22,8 @@
     require_once __DIR__ . '/../src/Scope.php';
     require_once __DIR__ . '/../src/Invoke.php';
     require_once __DIR__ . '/../src/Url.php';
+<<<<<<< HEAD
 
 ?>
+=======
+>>>>>>> b0d70d55ec4db9242f0d87d415084b6157042832

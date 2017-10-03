@@ -16,6 +16,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Utils::stringify(null), '');
         $this->assertEquals(Utils::stringify(''), '');
         $this->assertEquals(Utils::stringify([]), '[]');
+<<<<<<< HEAD
 
         $this->assertTrue(Utils::isBlank(''));
         $this->assertTrue(Utils::isBlank('   '));
@@ -120,5 +121,8 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Utils::stringify(''), '');
         $this->assertEquals(Utils::stringify(null), '');
         $this->assertEquals(Utils::stringify('string'), 'string');
+=======
+        $this->assertEquals(Utils::stringify(new \stdClass), '{}');
+>>>>>>> b0d70d55ec4db9242f0d87d415084b6157042832
     }
 }
