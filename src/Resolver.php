@@ -24,6 +24,8 @@ class Resolver
      */
     public function __construct($class)
     {
+        $class = trim(str_replace('-', '\\', $class));
+
         try {
             $this->instance = new ReflectionClass($class);
         } catch (Exception $e) {
@@ -54,14 +56,16 @@ class Resolver
     /**
      * Generate tag content
      *
-     * @param array $attrs list
+     * @param array $attrs   map
+     * @param mixed $content value
      *
      * @return string
      */
-    public function resolve(array $attrs = [])
+    public function resolve(array $attrs = [], $content = null)
     {
         $instance = $this->instance->newInstance();
         $instance->setAttributes($attrs);
+        $instance->setContent($content);
 
         return (string) $instance;
     }

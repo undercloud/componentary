@@ -118,14 +118,18 @@ class Utils
         }
 
         $map = [];
+        $slice = (
+            ('/>' === substr($tag, -2))
+                ? null
+                : substr($tag, $start = strpos($tag, '>') + 1, strrpos($tag, '</') - $start)
+        );
 
         $attrs = $document->documentElement->attributes;
-
         foreach ($attrs as $item) {
             $map[$item->name] = $item->value;
         }
 
-        return $map;
+        return [$map, $slice];
     }
 
     /**

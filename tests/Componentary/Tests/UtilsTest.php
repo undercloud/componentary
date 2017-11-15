@@ -100,7 +100,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expect, Utils::buildAttributes($attributes));
-        $this->assertEquals($attributes, Utils::parseAttributes('<a ' . $expect . ' />'));
+        $this->assertEquals($attributes, Utils::parseAttributes('<a ' . $expect . ' />')[0]);
     }
 
     public function testLimit()
