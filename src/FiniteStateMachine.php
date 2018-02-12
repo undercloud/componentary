@@ -12,6 +12,8 @@ class FiniteStateMachine
 
     public function __construct($html)
     {
+        //var_dump($html);
+
         $html = str_split($html);
         $this->queue = new ArrayIterator($html);
     }
@@ -32,7 +34,7 @@ class FiniteStateMachine
         $space = strpos($tag, ' ');
 
         if (false !== $space) {
-            return substr($tag, $from, $space);
+            return substr($tag, $from, $space - 1);
         }
 
         return rtrim(substr($tag, $from), '/>');
@@ -55,13 +57,22 @@ class FiniteStateMachine
         $openbrace = false;
         $inside = false;
         $componentName = false;
-        $tag = $text = $glue = $finite = '';
+        $tag = $text = null;
+        $glue = $finite = '';
         $selfRepeat = -1;
+        $lastOpen = false;
 
         while ($this->queue->valid()) {
             $char = $this->queue->current();
 
-            if ($char === '<') {
+            if (!$openbrace and $char === '<') {
+                if ($inside) {
+                    $glue .= $text;
+                } else {
+                    $finite .= $text;
+                }
+
+                $text = null;
                 $openbrace = true;
             }
 
@@ -72,12 +83,6 @@ class FiniteStateMachine
             }
 
             if ($openbrace and ($char === '>' or ($char === '/' and $this->getNextChar() === '>'))) {
-                if ($inside) {
-                    $glue .= $text;
-                } else if (strlen($text)) {
-                    $finite .= Utils::esc($text);
-                }
-
                 if ($char === '/') {
                     $this->queue->next();
                     $tag .= $this->queue->current();
@@ -86,7 +91,14 @@ class FiniteStateMachine
                 $isOpen = $this->isOpenComponentTag($tag);
                 if (!$inside and $isOpen) {
                     $inside = true;
+                    $lastOpen = $tag;
                     $componentName = $this->getTagName($tag);
+                }
+
+                if ($inside) {
+                    $glue .= $tag;
+                } else {
+                    $finite .= $tag;
                 }
 
                 if ($inside) {
@@ -96,17 +108,23 @@ class FiniteStateMachine
                         $selfRepeat++;
                     }
 
-                    $glue .= $tag;
                     $isClosed = $this->isClosedComponentTag($tag);
 
                     if ($isClosed and $sameTag and $selfRepeat === 0) {
                         $resolver = new Resolver($componentName);
                         list($attrs, $content) = Utils::parseAttributes($glue);
-
                         $finite .= (
                             $resolver->isValid()
                             ? $resolver->resolve($attrs, $content)
-                            : $glue
+                            : (
+                                $isOpen
+                                    ? $glue
+                                    : (
+                                        $lastOpen .
+                                            (new self($content))->walk() .
+                                        $tag
+                                    )
+                                )
                         );
 
                         $glue = '';
@@ -116,15 +134,17 @@ class FiniteStateMachine
                     if ($isClosed and $sameTag) {
                         $selfRepeat--;
                     }
-                } else{
-                    $finite .= $tag;
                 }
 
-                $tag = $text = '';
+                $tag = null;
                 $openbrace = false;
             }
 
             $this->queue->next();
+        }
+
+        if (null !== $text) {
+            $finite .= $text;
         }
 
         return $finite;

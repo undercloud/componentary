@@ -190,8 +190,6 @@ class Invoke
 
         $mapper = function ($item) {
             switch (gettype($item)) {
-                case 'NULL':
-                    return 'null';
                 case 'boolean':
                     return $item ? 'true' : 'false';
                 case 'string':
@@ -202,6 +200,7 @@ class Invoke
                 case 'integer':
                 case 'double':
                     return $item;
+                case 'NULL':
                 default:
                     return 'undefined';
             }

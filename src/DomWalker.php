@@ -113,11 +113,56 @@ class DomWalker
      *
      * @return self
      */
-    public function walk()
+    public function _walk()
     {
         $this->render = (new FiniteStateMachine($this->render))->walk();
 
         return $this;
+    }
+
+    public function walk()
+    {
+        $openBrace = false;
+        $parsed = '';
+        $tmp = '';
+        //foreach (str_split($this->render) as $symbol) {
+        $len = strlen($this->render);
+        for ($i = 0; $i < $len; $i++ ) {
+            $symbol = $this->render[$i];
+            if ('<' === $symbol) {
+                $openBrace = true;
+            }
+            if ($openBrace) {
+                $tmp .= $symbol;
+            } else {
+                $parsed .= $symbol;
+            }
+            if ('>' === $symbol) {
+                $openBrace = false;
+                $parsed .= $this->assign($tmp);
+                $tmp = '';
+            }
+        }
+
+        $this->render = $parsed;
+        return $this;
+    }
+
+    public function assign($tag)
+    {
+        if (ctype_upper($tag[1]) and '/>' === substr($tag, -2)) {
+            //if ($pure = $this->isIgnored($tag)) {
+            //    return $pure;
+            //}
+            $class = explode(' ', substr($tag, 1, -2), 2)[0];
+            $class = str_replace('-', '\\', $class);
+            $resolver = new Resolver($class);
+            if ($resolver->isValid()) {
+                $attrs = Utils::parseAttributes($tag);
+                return $resolver->resolve($attrs);
+            }
+        }
+        return $tag;
     }
 
     /**

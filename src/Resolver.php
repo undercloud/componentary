@@ -27,7 +27,7 @@ class Resolver
         $class = trim(str_replace('-', '\\', $class));
 
         try {
-            $this->instance = new ReflectionClass($class);
+            $this->instance = new $class;//ReflectionClass($class);
         } catch (Exception $e) {
             $prefix = Component::getPrefix();
             if ($prefix) {
@@ -47,6 +47,8 @@ class Resolver
      */
     public function isValid()
     {
+        return true;
+
         return (
             null !== $this->instance
             and $this->instance->isSubclassOf('Componentary\Component')
@@ -63,10 +65,10 @@ class Resolver
      */
     public function resolve(array $attrs = [], $content = null)
     {
-        $instance = $this->instance->newInstance();
+        $instance = $this->instance;//->newInstance();
         $instance->setAttributes($attrs);
         $instance->setContent($content);
 
-        return (string) $instance;
+        return $instance->__toString();
     }
 }
