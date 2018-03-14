@@ -141,12 +141,10 @@ class Style
      */
     protected function build()
     {
-        $fn = function ($key, $val) {
-            return $key . ':' . (string) $val;
-        };
-
         $pairs = array_map(
-            $fn,
+            function ($key, $val) {
+                return $key . ':' . (string) $val;
+            },
             array_keys($this->map),
             array_values($this->map)
         );

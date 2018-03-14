@@ -13,6 +13,6 @@ class ComponentTest extends PHPUnit_Framework_TestCase
         $user = new User;
         $user->name = 'John';
 
-        $this->assertEquals('<span>Hello: John</span>',(string) $user);
+        $this->assertEquals('<span>Hello: John</span>', (string) $user);
     }
 }

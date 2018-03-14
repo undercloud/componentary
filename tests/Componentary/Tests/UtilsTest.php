@@ -35,7 +35,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $expect = 'Hello John, complete at: 89%';
         $tmpl = Utils::template('Hello {1}, complete at: {2}%', 'John', 89);
 
-        $this->assertEquals($tmpl,$expect);
+        $this->assertEquals($tmpl, $expect);
     }
 
     public function testManipulate()
@@ -50,7 +50,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testMisc()
     {
         $this->assertEquals('L.A.', Utils::abbr('Los') . Utils::abbr('Angeles'));
-        $this->assertEquals(' hello world ',Utils::whitespace('  hello  world  '));
+        $this->assertEquals(' hello world ', Utils::whitespace('  hello  world  '));
 
         $this->assertEquals('1st', Utils::ordinal(1));
         $this->assertEquals('2nd', Utils::ordinal(2));

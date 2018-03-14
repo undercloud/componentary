@@ -143,8 +143,8 @@ class Utils
      */
     public static function unicode($string)
     {
-        $callback = function ($e) {
-            return '&#' . hexdec((int)$e[1]) . ';';
+        $callback = function ($item) {
+            return '&#' . hexdec((int) $item[1]) . ';';
         };
 
         return preg_replace_callback('~\\\u([0-9]{4})~', $callback, $string);
@@ -168,8 +168,8 @@ class Utils
                         ', ',
                         array_filter(
                             $item,
-                            function ($el) {
-                                return (is_scalar($el) and !self::isBlank($el));
+                            function ($item) {
+                                return (is_scalar($item) and !self::isBlank($item));
                             }
                         )
                     );
@@ -181,8 +181,8 @@ class Utils
 
         $tmpl = preg_replace_callback(
             '~\{[0-9]{1,2}\}~',
-            function ($e) {
-                return '%' . trim($e[0], '{}') . '$s';
+            function ($item) {
+                return '%' . trim($item[0], '{}') . '$s';
             },
             $tmpl
         );
@@ -348,9 +348,9 @@ class Utils
     public static function ordinal($cdnl)
     {
         $cdnl = (int) $cdnl;
-        $c    = abs($cdnl) % 10;
+        $mod  = abs($cdnl) % 10;
         $ext  = ((abs($cdnl) %100 < 21 && abs($cdnl) %100 > 4) ? 'th'
-            : (($c < 4) ? ($c < 3) ? ($c < 2) ? ($c < 1)
+            : (($mod < 4) ? ($mod < 3) ? ($mod < 2) ? ($mod < 1)
             ? 'th' : 'st' : 'nd' : 'rd' : 'th')
         );
         return $cdnl . $ext;
@@ -418,7 +418,7 @@ class Utils
      */
     public static function lorem($limit = 544)
     {
-        $s = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, "
+        $msg = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, "
             . "sed diam nonummy nibh euismod tincidunt ut laoreet dolore "
             . "magna aliquam erat volutpat. Ut wisi enim ad minim veniam, "
             . "quis nostrud exerci tation ullamcorper suscipit lobortis nisl "
@@ -428,12 +428,12 @@ class Utils
             . "accumsan et iusto odio dignissim qui blandit praesent luptatum "
             . "zzril delenit augue duis dolore te feugait nulla facilisi. ";
 
-        $n = strlen($s);
+        $len = strlen($msg);
 
-        if ($limit > $n) {
-            $s = str_repeat($s, (int)($limit / $n) + 1);
+        if ($limit > $len) {
+            $msg = str_repeat($msg, (int)($limit / $len) + 1);
         }
-        return self::limitWords($s, $limit);
+        return self::limitWords($msg, $limit);
     }
 
     /**
@@ -463,11 +463,11 @@ class Utils
 
         $data = json_encode($data, $flag);
 
-        if ($error_code = json_last_error()) {
+        if ($errorCode = json_last_error()) {
             throw new Exception(
                 function_exists('json_last_error_msg')
                 ? json_last_error_msg()
-                : 'Cannot encode to JSON: ' . $error_code
+                : 'Cannot encode to JSON: ' . $errorCode
             );
         }
 
@@ -492,13 +492,13 @@ class Utils
 
         json_encode(null);
 
-        $json = json_parse($json);
+        $json = json_decode($json, $assoc);
 
-        if ($error_code = json_last_error()) {
+        if ($errorCode = json_last_error()) {
             throw new Exception(
                 function_exists('json_last_error_msg')
                 ? json_last_error_msg()
-                : 'Cannot parse JSON string: ' . $error_code
+                : 'Cannot parse JSON string: ' . $errorCode
             );
         }
 

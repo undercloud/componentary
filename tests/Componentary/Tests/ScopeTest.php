@@ -12,10 +12,9 @@ class ScopeTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(Scope::has('foo'));
         $this->assertEquals('bar', Scope::get('foo'));
-        $this->assertEquals('quux', Scope::get('baz','quux'));
+        $this->assertEquals('quux', Scope::get('baz', 'quux'));
         $this->assertEquals('bar', Scope::getOnce('foo'));
 
         $this->assertFalse(Scope::has('foo'));
     }
 }
-?>
