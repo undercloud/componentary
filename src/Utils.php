@@ -73,7 +73,7 @@ class Utils
     public static function buildAttributes(array $args)
     {
         $hooks = function ($val) {
-            $except = [
+            static $except = [
                 'Componentary\Invoke',
                 'Componentary\Url',
                 'Componentary\Style',
@@ -96,40 +96,6 @@ class Utils
         }
 
         return implode(' ', $pairs);
-    }
-
-    /**
-     * Extract attributes
-     *
-     * @param string $tag node
-     *
-     * @return array
-     */
-    public static function parseAttributes($tag)
-    {
-        libxml_clear_errors();
-
-        $document = new DOMDocument('1.0', 'UTF-8');
-        if (!@$document->loadXML($tag)) {
-            $tag = debug_backtrace()[0]['args'][0];
-            $lastError = libxml_get_last_error();
-
-            throw new Exception($lastError->message . ' ' . $tag);
-        }
-
-        $map = [];
-        $slice = (
-            ('/>' === substr($tag, -2))
-                ? null
-                : substr($tag, $start = strpos($tag, '>') + 1, strrpos($tag, '</') - $start)
-        );
-
-        $attrs = $document->documentElement->attributes;
-        foreach ($attrs as $item) {
-            $map[$item->name] = $item->value;
-        }
-
-        return [$map, $slice];
     }
 
     /**
@@ -164,6 +130,7 @@ class Utils
         if (is_string($what)) {
             $what = trim($what);
         }
+
         return @empty($what);
     }
 

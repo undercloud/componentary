@@ -96,6 +96,16 @@ trait AttributesTrait
     }
 
     /**
+     * Remove attributes
+     *
+     * @return null
+     */
+    public function removeAttributes()
+    {
+        $this->attributes = [];
+    }
+
+    /**
      * Magic __set
      *
      * @param string $name key
