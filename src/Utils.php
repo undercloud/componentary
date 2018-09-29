@@ -504,4 +504,26 @@ class Utils
 
         return $json;
     }
+
+    /**
+     * Read data from file and encode to base64
+     *
+     * @param  string  $path     /to/file
+     * @param  string  $mime     type
+     * @param  boolean $wrap_url add url(...) wrap
+     *
+     * @return string
+     */
+    public static function dataUri($path, $mime, $wrap_url = false)
+    {
+        $file = new SplFileObject($path);
+        $contents = $file->fread($file->getSize());
+        $contents = base64_encode($contents);
+
+        return (
+            ($wrap_url ? 'url(' : '') .
+            'data:' . $mime . ';base64,' . $contents
+            ($wrap_url ? ')' : '')
+        );
+    }
 }

@@ -30,5 +30,16 @@ class ClassTest extends PHPUnit_Framework_TestCase
         );
 
         $e->class->clear();
+
+        $e->class = [
+            'one',
+            'two' => true,
+            'three' => false
+        ];
+
+        $this->assertEquals(
+           'one two',
+            $e->class
+        );
     }
 }

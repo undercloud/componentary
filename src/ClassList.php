@@ -33,10 +33,18 @@ class ClassList
         }
 
         if (is_string($list)) {
-            $list = array_filter(explode(' ', $list));
+            $list = explode(' ', $list);
         }
 
-        $this->list = $list;
+        $list = array_filter($list);
+
+        foreach ($list as $key => $value) {
+            if (!is_numeric($key)) {
+                $list[$key] = $key;
+            }
+        }
+
+        $this->list = array_values($list);
     }
 
     /**
