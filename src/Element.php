@@ -50,7 +50,10 @@ class Element extends AbstractDom
             $this->selfClose = true;
         }
 
-        $this->attributes = $attributes;
+        foreach($attributes as $key => $value){
+            $this->setAttribute($key, $value);
+        }
+        
         $this->content = $content;
     }
 
