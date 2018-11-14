@@ -244,7 +244,7 @@ class Element extends AbstractDom
                     return (string) $item;
                 };
 
-                $element = implode(array_map($mapper, $this->content));
+                $element .= implode(array_map($mapper, $this->content));
             } else {
                 $element .= (string) $this->content;
             }
