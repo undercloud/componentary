@@ -1,8 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-
 /**
  * URL Builder
  *
@@ -23,6 +21,8 @@ class Url
 
     /**
      * @param string|null $url value
+     *
+     * @throws RenderException
      */
     public function __construct($url = null)
     {
@@ -35,7 +35,7 @@ class Url
             $parsed = @parse_url($url);
 
             if (false === $parsed) {
-                throw new Exception('Wrong URL:' . $url);
+                throw new RenderException('Wrong URL:' . $url);
             }
 
             foreach (self::$parts as $part) {

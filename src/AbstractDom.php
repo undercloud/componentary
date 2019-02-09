@@ -1,6 +1,8 @@
 <?php
 namespace Componentary;
 
+use Exception;
+
 /**
  * Abstract DOM entity
  *

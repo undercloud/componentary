@@ -1,8 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-
 /**
  * Class helper
  *
@@ -20,11 +18,13 @@ class ClassList
 
     /**
      * @param array|string $list of classes
+     *
+     * @throws RenderException
      */
     public function __construct($list = [])
     {
         if (!is_array($list) and !is_string($list)) {
-            throw new Exception(
+            throw new RenderException(
                 sprintf(
                     'Argument 1 must be array or string, %s given',
                     gettype($list)

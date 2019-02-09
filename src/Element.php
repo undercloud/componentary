@@ -1,8 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-
 /**
  * DOM elements factory
  *

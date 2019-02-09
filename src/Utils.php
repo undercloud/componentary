@@ -1,9 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-use DOMDocument;
-
 /**
  * Utils stack
  *
@@ -442,6 +439,8 @@ class Utils
      * @param mixed   $data   for encoding
      * @param boolean $escape flag
      *
+     * @throws RenderException
+     *
      * @return string
      */
     public static function toJson($data, $escape = false)
@@ -464,7 +463,7 @@ class Utils
         $data = json_encode($data, $flag);
 
         if ($errorCode = json_last_error()) {
-            throw new Exception(
+            throw new RenderException(
                 function_exists('json_last_error_msg')
                 ? json_last_error_msg()
                 : 'Cannot encode to JSON: ' . $errorCode
@@ -484,6 +483,8 @@ class Utils
      * @param string  $json  string
      * @param boolean $assoc if TRUE, returned objects will be cast into assoc arrays
      *
+     * @throws RenderException
+     *
      * @return mixed
      */
     public static function fromJson($json, $assoc = false)
@@ -495,7 +496,7 @@ class Utils
         $json = json_decode($json, $assoc);
 
         if ($errorCode = json_last_error()) {
-            throw new Exception(
+            throw new RenderException(
                 function_exists('json_last_error_msg')
                 ? json_last_error_msg()
                 : 'Cannot parse JSON string: ' . $errorCode

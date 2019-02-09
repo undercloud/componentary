@@ -202,7 +202,7 @@ class Invoke
                     return $item;
                 case 'NULL':
                 default:
-                    return 'undefined';
+                    return 'null';
             }
         };
 

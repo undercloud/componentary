@@ -1,8 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-
 /**
  * Inline style generator
  *
@@ -20,11 +18,13 @@ class Style
 
     /**
      * @param array|string $style declaration
+     *
+     * @throws RenderException
      */
     public function __construct($style = [])
     {
         if (!is_array($style) and !is_string($style)) {
-            throw new Exception(
+            throw new RenderException(
                 sprintf(
                     'Argument 1 must be array or string, %s given',
                     gettype($style)

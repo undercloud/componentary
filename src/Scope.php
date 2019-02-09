@@ -1,8 +1,6 @@
 <?php
 namespace Componentary;
 
-use Exception;
-
 /**
  * Scope storage
  *
@@ -58,7 +56,7 @@ class Scope
      *
      * @param string $key name
      *
-     * @throws Exception
+     * @throws RenderException
      *
      * @return mixed
      */
@@ -72,7 +70,7 @@ class Scope
             return $default;
         }
 
-        throw new Exception('Undefined index: ' . $key);
+        throw new RenderException('Undefined index: ' . $key);
     }
 
     /**
