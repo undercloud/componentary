@@ -48,7 +48,10 @@ class Element extends AbstractDom
             $this->selfClose = true;
         }
 
-        $this->attributes = $attributes;
+        foreach($attributes as $key => $value){
+            $this->setAttribute($key, $value);
+        }
+        
         $this->content = $content;
     }
 
@@ -239,7 +242,7 @@ class Element extends AbstractDom
                     return (string) $item;
                 };
 
-                $element = implode(array_map($mapper, $this->content));
+                $element .= implode(array_map($mapper, $this->content));
             } else {
                 $element .= (string) $this->content;
             }
