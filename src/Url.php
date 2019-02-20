@@ -35,7 +35,7 @@ class Url
             $parsed = @parse_url($url);
 
             if (false === $parsed) {
-                throw new RenderException('Wrong URL:' . $url);
+                throw new RenderException('Malformed URL: ' . $url);
             }
 
             foreach (self::$parts as $part) {
