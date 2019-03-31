@@ -52,7 +52,7 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return null
+     * @return void
      */
     public function add($class)
     {
@@ -78,7 +78,7 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return null
+     * @return void
      */
     public function remove($class)
     {
@@ -90,7 +90,7 @@ class ClassList
      *
      * @param string $class name
      *
-     * @return null
+     * @return void
      */
     public function toggle($class)
     {
@@ -104,7 +104,7 @@ class ClassList
     /**
      * Reset class list
      *
-     * @return null
+     * @return void
      */
     public function clear()
     {

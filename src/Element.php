@@ -39,6 +39,8 @@ class Element extends AbstractDom
 
     /**
      * @param string $tagName tag name
+     *
+     * @throws RenderException
      */
     public function __construct($tagName, array $attributes = [], $content = null)
     {
@@ -60,7 +62,7 @@ class Element extends AbstractDom
      *
      * @param string $tagName tag name
      *
-     * @return null
+     * @return void
      */
     public function setTagName($tagName)
     {
@@ -81,6 +83,8 @@ class Element extends AbstractDom
      * Get attribute value
      *
      * @param string $name of attribute
+     *
+     * @throws RenderException
      *
      * @return mixed
      */
@@ -107,7 +111,9 @@ class Element extends AbstractDom
      * @param string $name key
      * @param mixed  $val  value
      *
-     * @return null
+     * @throws RenderException
+     *
+     * @return void
      */
     public function setAttribute($name, $val)
     {
@@ -213,7 +219,7 @@ class Element extends AbstractDom
      *
      * @param boolean $mode flag
      *
-     * @return null
+     * @return void
      */
     public function selfClose($mode)
     {

@@ -34,7 +34,7 @@ trait AttributesTrait
      * @param string $name key
      * @param mixed  $val  value
      *
-     * @return null
+     * @return void
      */
     public function setAttribute($name, $val)
     {
@@ -46,7 +46,7 @@ trait AttributesTrait
      *
      * @param array $attributes map
      *
-     * @return null
+     * @return void
      */
     public function setAttributes(array $attributes)
     {
@@ -98,7 +98,7 @@ trait AttributesTrait
     /**
      * Remove attributes
      *
-     * @return null
+     * @return void
      */
     public function removeAttributes()
     {
@@ -111,11 +111,11 @@ trait AttributesTrait
      * @param string $name key
      * @param mixed  $val  val
      *
-     * @return null
+     * @return void
      */
     public function __set($name, $val)
     {
-        return $this->setAttribute($name, $val);
+        $this->setAttribute($name, $val);
     }
 
     /**

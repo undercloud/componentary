@@ -376,7 +376,7 @@ class Utils
      */
     public static function bytesHuman($size, $precision = 2)
     {
-        $units = array('B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb');
+        $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
         foreach ($units as $unit) {
             if (abs($size) >= 1024 && $unit != 'Yb') {
                 $size = ($size / 1024);
@@ -396,7 +396,7 @@ class Utils
      */
     public static function roundHuman($size, $precision = 2)
     {
-        $units = array('', 'K', 'M', 'B', 'T', 'Qa', 'Qi');
+        $units = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi'];
         foreach ($units as $unit) {
             if (abs($size) >= 1000 && $unit != 'Qi') {
                 $size = ($size / 1000);
@@ -509,22 +509,22 @@ class Utils
     /**
      * Read data from file and encode to base64
      *
-     * @param  string  $path     /to/file
-     * @param  string  $mime     type
-     * @param  boolean $wrap_url add url(...) wrap
+     * @param string  $path    /to/file
+     * @param string  $mime    type
+     * @param boolean $wrapUrl add url(...) wrap
      *
      * @return string
      */
-    public static function dataUri($path, $mime, $wrap_url = false)
+    public static function dataUri($path, $mime, $wrapUrl = false)
     {
         $file = new SplFileObject($path);
         $contents = $file->fread($file->getSize());
         $contents = base64_encode($contents);
 
         return (
-            ($wrap_url ? 'url(' : '') .
+            ($wrapUrl ? 'url(' : '') .
             'data:' . $mime . ';base64,' . $contents
-            ($wrap_url ? ')' : '')
+            ($wrapUrl ? ')' : '')
         );
     }
 }

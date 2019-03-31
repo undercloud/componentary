@@ -28,7 +28,7 @@ class Url
     {
         if (null === $url) {
             foreach (self::$parts as $part) {
-                $this->$part = null;
+                $this->{$part} = null;
             }
         } else {
             $url = (string) $url;
@@ -39,7 +39,7 @@ class Url
             }
 
             foreach (self::$parts as $part) {
-                $this->$part = ((isset($parsed[$part])) ? $parsed[$part] : null);
+                $this->{$part} = ((isset($parsed[$part])) ? $parsed[$part] : null);
             }
 
             if ($this->query) {
