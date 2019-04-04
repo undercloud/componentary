@@ -20,28 +20,4 @@ abstract class Component extends AbstractDom
     {
         $this->attributes = $attributes;
     }
-
-    /**
-     * Set content value
-     *
-     * @param string  $content value
-     *
-     * @return self
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content value
-     *
-     * @return mixed
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
 }

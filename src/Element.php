@@ -33,12 +33,14 @@ class Element extends AbstractDom
     protected $tagName;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $content;
+    protected $content = [];
 
     /**
      * @param string $tagName tag name
+     * @param array  $attributes  map
+     * @param mixed  $content     value
      *
      * @throws RenderException
      */
@@ -91,11 +93,11 @@ class Element extends AbstractDom
     public function getAttribute($name)
     {
         if (!isset($this->attributes[$name])) {
-            if ('style' == $name) {
+            if ('style' === $name) {
                 $this->attributes[$name] = new Style;
             }
 
-            if ('class' == $name) {
+            if ('class' === $name) {
                 $this->attributes[$name] = new ClassList;
             }
         }
@@ -119,7 +121,7 @@ class Element extends AbstractDom
     {
         if ('style' === $name) {
             $val = (
-                $val instanceof Componentary\Style
+                $val instanceof Style
                 ? $val
                 : new Style($val)
             );
@@ -127,7 +129,7 @@ class Element extends AbstractDom
 
         if ('class' === $name) {
             $val = (
-                $val instanceof Componentary\ClassList
+                $val instanceof ClassList
                 ? $val
                 : new ClassList($val)
             );
@@ -139,24 +141,13 @@ class Element extends AbstractDom
     /**
      * Append child content
      *
-     * @param mixed   $element content
-     * @param boolean $escape  flag
+     * @param AbstractDom $element content
      *
      * @return self
      */
-    public function appendChild($element, $escape = false)
+    public function appendChild(AbstractDom $element)
     {
-        $element = (string) $element;
-        if ($escape) {
-            $element = Utils::esc($element);
-        }
-
         $this->selfClose = false;
-
-        if (!is_array($this->content)) {
-            $this->content = [$this->content];
-        }
-
         $this->content[] = $element;
 
         return $this;
@@ -165,24 +156,13 @@ class Element extends AbstractDom
     /**
      * Prepend child content
      *
-     * @param mixed   $element content
-     * @param boolean $escape  flag
+     * @param AbstractDom $element content
      *
      * @return self
      */
-    public function prependChild($element, $escape = false)
+    public function prependChild(AbstractDom $element)
     {
-        $element = (string) $element;
-        if ($escape) {
-            $element = Utils::esc($element);
-        }
-
         $this->selfClose = false;
-
-        if (!is_array($this->content)) {
-            $this->content = [$this->content];
-        }
-
         array_unshift($this->content, $element);
 
         return $this;
@@ -196,10 +176,29 @@ class Element extends AbstractDom
      *
      * @return self
      */
-    public function setContent($content, $escape = true)
+    public function appendContent($content, $escape = true)
     {
         $this->selfClose = false;
-        $this->content = $escape ? Utils::esc((string) $content) : $content;
+        $this->content[] = $escape ? Utils::esc((string) $content) : $content;
+
+        return $this;
+    }
+
+    /**
+     * Set content value
+     *
+     * @param string  $content value
+     * @param boolean $escape  flag
+     *
+     * @return self
+     */
+    public function prependContent($content, $escape = true)
+    {
+        $this->selfClose = false;
+        array_unshift(
+            $this->content,
+            $escape ? Utils::esc((string) $content) : $content
+        );
 
         return $this;
     }
@@ -207,7 +206,7 @@ class Element extends AbstractDom
     /**
      * Get content value
      *
-     * @return mixed
+     * @return array
      */
     public function getContent()
     {
@@ -242,15 +241,12 @@ class Element extends AbstractDom
             $element .= ' />';
         } else {
             $element .= '>';
-
-            if (is_array($this->content)) {
+            if ($this->content) {
                 $mapper = function ($item) {
                     return (string) $item;
                 };
 
                 $element .= implode(array_map($mapper, $this->content));
-            } else {
-                $element .= (string) $this->content;
             }
 
             $element .= '</' . $this->tagName . '>';

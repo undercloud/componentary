@@ -47,7 +47,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
     public function testContent()
     {
         $e = new Element('foo');
-        $e->setContent('bar');
+        $e->appendContent('bar');
         $this->assertEquals('bar', $e->getContent());
 
         $e->prependChild('baz');
