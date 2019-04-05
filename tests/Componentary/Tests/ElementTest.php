@@ -48,13 +48,24 @@ class ElementTest extends PHPUnit_Framework_TestCase
     {
         $e = new Element('foo');
         $e->appendContent('bar');
-        $this->assertEquals('bar', $e->getContent());
+        $this->assertEquals(['bar'], $e->getContent());
 
-        $e->prependChild('baz');
-        $this->assertEquals(['baz', 'bar'], $e->getContent());
+        $e->prependContent('baz');
+        $this->assertEquals(['baz','bar'], $e->getContent());
 
-        $e->appendChild('ban');
-        $this->assertEquals(['baz', 'bar', 'ban'], $e->getContent());
+        $bax = new Element('bax');
+        $bax->selfClose(true);
+
+        $e->prependChild($bax);
+        $this->assertEquals([$bax, 'baz', 'bar'], $e->getContent());
+
+        $ban = new Element('ban');
+        $ban->selfClose(true);
+        $e->appendChild($ban);
+        $this->assertEquals([$bax, 'baz', 'bar', $ban], $e->getContent());
+
+
+        $this->assertEquals('<bax/>bazbar<ban/>', (string) $e);
     }
 
     public function testExtraAttributes()
