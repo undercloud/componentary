@@ -65,7 +65,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$bax, 'baz', 'bar', $ban], $e->getContent());
 
 
-        $this->assertEquals('<foo><bax/>bazbar<ban/></foo>', (string) $e);
+        $this->assertEquals('<foo><bax />bazbar<ban /></foo>', (string) $e);
     }
 
     public function testExtraAttributes()
