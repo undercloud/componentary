@@ -1,0 +1,21 @@
+{
+  "name": "undercloud/componentary",
+  "description": "PHP Server-Side Components",
+  "keywords": ["php","html","dom","component"],
+  "homepage": "https://github.com/undercloud/componentary",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "undercloud",
+      "email": "lodashes@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+   "autoload": {
+      "psr-4": {
+         "Componentary\\": "src/"
+      }
+   }
+}
